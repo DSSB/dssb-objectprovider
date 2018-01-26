@@ -1,0 +1,9 @@
+version="${theVersion}.0"
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.16.16'
+    
+    compile 'dssb-failable:dssb-failable-api:1.0.0'
+    
+    testCompile 'junit:junit:4.12'
+}
