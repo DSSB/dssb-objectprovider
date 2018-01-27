@@ -6,10 +6,10 @@ import org.junit.Test;
 
 import dssb.objectprovider.api.IProvideObject;
 
-public class DefaultLocatorTest {
+public class DefaultProviderTest {
     
     @Test
-    public void testDefaultLocator() {
+    public void testDefaultProvider() {
         assertTrue(ObjectProvider.class.isInstance(IProvideObject.defaultProvider().get()));
     }
     

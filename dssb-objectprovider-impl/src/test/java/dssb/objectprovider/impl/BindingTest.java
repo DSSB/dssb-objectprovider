@@ -22,9 +22,9 @@ public class BindingTest {
         val bindings = new Bindings.Builder()
                 .bind(String.class, new InstanceBinding<>(expectedString))
                 .build();
-        val locator = new ObjectProvider.Builder().bingings(bindings).build();
+        val provider = new ObjectProvider.Builder().bingings(bindings).build();
         
-        assertEquals(expectedString, locator.get(String.class));
+        assertEquals(expectedString, provider.get(String.class));
     }
     
     public static class MyRunnable implements Runnable {
@@ -39,15 +39,15 @@ public class BindingTest {
         val bindings = new Bindings.Builder()
                 .bind(Runnable.class, new TypeBinding<>(MyRunnable.class))
                 .build();
-        val locator = new ObjectProvider.Builder().bingings(bindings).build();
+        val provider = new ObjectProvider.Builder().bingings(bindings).build();
         
-        assertTrue(expectedClass.isInstance(locator.get(Runnable.class)));
+        assertTrue(expectedClass.isInstance(provider.get(Runnable.class)));
     }
     
     public static class IntegerFactory implements ICreateObject<Integer> {
         private AtomicInteger integer = new AtomicInteger(0);
         @Override
-        public Integer create(IProvideObject objectLocator) {
+        public Integer create(IProvideObject objectprovider) {
             return integer.getAndIncrement();
         }
         
@@ -58,11 +58,11 @@ public class BindingTest {
         val bindings = new Bindings.Builder()
                 .bind(Integer.class, new FactoryBinding<>(new IntegerFactory()))
                 .build();
-        val locator = new ObjectProvider.Builder().bingings(bindings).build();
+        val provider = new ObjectProvider.Builder().bingings(bindings).build();
         
-        assertTrue(0 == locator.get(Integer.class));
-        assertTrue(1 == locator.get(Integer.class));
-        assertTrue(2 == locator.get(Integer.class));
+        assertTrue(0 == provider.get(Integer.class));
+        assertTrue(1 == provider.get(Integer.class));
+        assertTrue(2 == provider.get(Integer.class));
     }
     
 }

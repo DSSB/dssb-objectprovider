@@ -72,9 +72,9 @@ public class ObjectProvider implements IProvideObject {
     
     private static final Bindings noBinding = new Bindings.Builder().build();
     
-    private IProvideObject       parent;
-    private List<IFindSupplier>  finders;
-    private IHandleLocateFailure locateFailureHandler;
+    private IProvideObject        parent;
+    private List<IFindSupplier>   finders;
+    private IHandleProvideFailure provideFailureHandler;
     
     private Bindings binidings;
     
@@ -89,14 +89,14 @@ public class ObjectProvider implements IProvideObject {
     
     @SuppressWarnings("rawtypes")
     public ObjectProvider(
-            IProvideObject       parent,
-            List<IFindSupplier>  additionalSupplierFinders,
-            Bindings             bingings,
-            IHandleLocateFailure locateFailureHandler) {
-        this.parent               = parent;
-        this.finders              = combineFinders(additionalSupplierFinders);
-        this.locateFailureHandler = locateFailureHandler;
-        this.binidings            = bingings.or(noBinding);
+            IProvideObject        parent,
+            List<IFindSupplier>   additionalSupplierFinders,
+            Bindings              bingings,
+            IHandleProvideFailure provideFailureHandler) {
+        this.parent                = parent;
+        this.finders               = combineFinders(additionalSupplierFinders);
+        this.provideFailureHandler = provideFailureHandler;
+        this.binidings             = bingings.or(noBinding);
         
         // Supportive
         this.additionalSupplierFinders = additionalSupplierFinders;
@@ -107,17 +107,17 @@ public class ObjectProvider implements IProvideObject {
     @AllArgsConstructor
     @Accessors(fluent=true,chain=true)
     public static class Builder {
-        private IProvideObject       parent;
-        private List<IFindSupplier>  additionalSupplierFinders;
-        private Bindings             bingings;
-        private IHandleLocateFailure locateFailureHandler;
+        private IProvideObject        parent;
+        private List<IFindSupplier>   additionalSupplierFinders;
+        private Bindings              bingings;
+        private IHandleProvideFailure provideFailureHandler;
         
         public Builder() {
             this(null, null, null, null);
         }
         
         public ObjectProvider build() {
-            return new ObjectProvider(parent, additionalSupplierFinders, bingings, locateFailureHandler);
+            return new ObjectProvider(parent, additionalSupplierFinders, bingings, provideFailureHandler);
         }
     }
     
@@ -130,19 +130,19 @@ public class ObjectProvider implements IProvideObject {
     }
     
     public ObjectProvider withNewCache() {
-        return new ObjectProvider(parent, additionalSupplierFinders, binidings, locateFailureHandler);
+        return new ObjectProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
     }
     
     public ObjectProvider withSharedCache() {
-        return new ObjectProvider(parent, additionalSupplierFinders, binidings, locateFailureHandler);
+        return new ObjectProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
     }
     
-    public ObjectProvider wihtLocateFailureHandler(IHandleLocateFailure locateFailureHandler) {
-        return new ObjectProvider(parent, additionalSupplierFinders, binidings, locateFailureHandler);
+    public ObjectProvider wihtProvideFailureHandler(IHandleProvideFailure provideFailureHandler) {
+        return new ObjectProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
     }
     
     public ObjectProvider wihtBindings(Bindings binidings) {
-        return new ObjectProvider(parent, additionalSupplierFinders, binidings, locateFailureHandler);
+        return new ObjectProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
     }
     
     /**
@@ -150,7 +150,7 @@ public class ObjectProvider implements IProvideObject {
      * 
      * @param theGivenClass
      * @return the created value.
-     * @throws LocateObjectException when there is a problem locating the object.
+     * @throws ProvideObjectException when there is a problem providing the object.
      */
     @SuppressWarnings("rawtypes")
     @Override
@@ -212,14 +212,14 @@ public class ObjectProvider implements IProvideObject {
     }
     
     private <T> Object handleLoateFailure(Class<T> theGivenClass) {
-        if (this.locateFailureHandler.isNotNull()) {
+        if (this.provideFailureHandler.isNotNull()) {
             return callHandler(theGivenClass);
         } else {
             return defaultHandling(theGivenClass);
         }
     }
     private <T> Object callHandler(Class<T> theGivenClass) {
-        T value = this.locateFailureHandler.handle(theGivenClass);
+        T value = this.provideFailureHandler.handle(theGivenClass);
         return value;
     }
     private <T> Object defaultHandling(Class<T> theGivenClass) {
