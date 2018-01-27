@@ -12,9 +12,9 @@ subprojects {
     targetCompatibility = theSourceCompatibility
     
     repositories {
+        maven { url 'https://raw.githubusercontent.com/NawaMan/maven-repository/master/' }
         mavenLocal()
         mavenCentral()
-        maven { url 'https://raw.githubusercontent.com/NawaMan/maven-repository/master/' }
     }
     
     // IDE
