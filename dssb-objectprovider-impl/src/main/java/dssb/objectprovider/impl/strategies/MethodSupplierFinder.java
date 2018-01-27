@@ -28,6 +28,11 @@ import lombok.experimental.ExtensionMethod;
 
 
 // TODO - Change this to composite to inherit
+/**
+ * Abstract class for supplier finders that get value from constructor or method.
+ * 
+ * @author NawaMan -- nawaman@dssb.io
+ */
 @ExtensionMethod({ Nulls.class, extensions.class })
 public abstract class MethodSupplierFinder implements IFindSupplier {
     

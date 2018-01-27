@@ -24,6 +24,11 @@ import lombok.NonNull;
 import lombok.experimental.ExtensionMethod;
 
 // TODO - Pipeable
+/**
+ * Collections of bindings.
+ * 
+ * @author NawaMan -- nawaman@dssb.io
+ */
 @ExtensionMethod({ Nulls.class })
 public class Bindings {
     

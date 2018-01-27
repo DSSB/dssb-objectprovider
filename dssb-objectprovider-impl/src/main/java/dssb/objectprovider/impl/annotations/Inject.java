@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 /**
  * A ready to use annotation to mask that a constructor is the be used to create the object.
  * 
- * @author NawaMan
+ * @author NawaMan -- nawaman@dssb.io
  */
 @Target(value=ElementType.CONSTRUCTOR)
 @Retention(RetentionPolicy.RUNTIME)

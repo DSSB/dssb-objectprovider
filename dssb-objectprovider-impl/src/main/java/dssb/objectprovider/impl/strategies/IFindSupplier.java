@@ -18,11 +18,16 @@ package dssb.objectprovider.impl.strategies;
 import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
 
+/**
+ * Classes implementing this interface know how to find supplier for object of the given class.
+ * 
+ * @author NawaMan -- nawaman@dssb.io
+ */
 @FunctionalInterface
 public interface IFindSupplier {
     
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
-            Class<TYPE>    clss,
+            Class<TYPE>    theGivenClass,
             IProvideObject objectProvider);
     
 }

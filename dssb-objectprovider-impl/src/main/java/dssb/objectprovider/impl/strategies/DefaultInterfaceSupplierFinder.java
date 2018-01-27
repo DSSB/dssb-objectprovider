@@ -22,6 +22,11 @@ import dssb.objectprovider.api.IProvideObject;
 import dssb.utils.common.Nulls;
 import lombok.experimental.ExtensionMethod;
 
+/**
+ * This class find object of interface will all default methods.
+ * 
+ * @author NawaMan -- nawaman@dssb.io
+ */
 @ExtensionMethod({ Nulls.class, extensions.class })
 public class DefaultInterfaceSupplierFinder implements IFindSupplier {
 

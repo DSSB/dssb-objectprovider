@@ -18,6 +18,13 @@ package dssb.objectprovider.impl.bindings;
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.IBind;
 
+/**
+ * Bind to a value.
+ * 
+ * @param <TYPE> the type the factory can provide.
+ * 
+ * @author NawaMan -- nawaman@dssb.io
+ */
 public class InstanceBinding<TYPE> implements IBind<TYPE> {
     
     private final TYPE instance;

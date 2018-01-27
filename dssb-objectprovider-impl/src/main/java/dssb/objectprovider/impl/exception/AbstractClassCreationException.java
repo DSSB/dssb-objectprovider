@@ -20,7 +20,7 @@ import dssb.objectprovider.api.ProvideObjectException;
 /**
  * This exception is thrown when there is an to create an instance of an abstract class .
  * 
- * @author NawaMan
+ * @author NawaMan -- nawaman@dssb.io
  */
 public class AbstractClassCreationException extends ProvideObjectException {
 

@@ -19,6 +19,13 @@ import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.IBind;
 import lombok.val;
 
+/**
+ * Bind to a type.
+ *
+ * @param <TYPE> the type the factory can provide.
+ * 
+ * @author NawaMan -- nawaman@dssb.io
+ */
 public class TypeBinding<TYPE> implements IBind<TYPE> {
     
     private final Class<? extends TYPE> referedType;

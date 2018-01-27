@@ -22,6 +22,11 @@ import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.annotations.DefaultToNull;
 import lombok.experimental.ExtensionMethod;
 
+/**
+ * This class will provider null if the given class is annotated with @DefaultToNull.
+ * 
+ * @author NawaMan -- nawaman@dssb.io
+ */
 @ExtensionMethod({ extensions.class })
 public class NullSupplierFinder implements IFindSupplier {
     

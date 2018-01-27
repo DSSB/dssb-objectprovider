@@ -29,6 +29,11 @@ import dssb.utils.common.Nulls;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 
+/**
+ * This class returns object resulting from a factory method.
+ * 
+ * @author NawaMan -- nawaman@dssb.io
+ */
 @ExtensionMethod({ Nulls.class, extensions.class })
 public class FactoryMethodSupplierFinder extends MethodSupplierFinder implements IFindSupplier {
 

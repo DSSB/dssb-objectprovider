@@ -20,7 +20,7 @@ import dssb.objectprovider.api.ProvideObjectException;
 /**
  * This exception is thrown when creating an object fail.
  * 
- * @author NawaMan
+ * @author NawaMan -- nawaman@dssb.io
  */
 public class ObjectCreationException extends ProvideObjectException {
     

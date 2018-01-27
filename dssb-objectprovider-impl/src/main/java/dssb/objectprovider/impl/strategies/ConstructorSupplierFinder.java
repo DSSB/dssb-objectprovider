@@ -27,6 +27,11 @@ import dssb.utils.common.Nulls;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 
+/**
+ * This class get an object by invoking a constructor.
+ * 
+ * @author NawaMan -- nawaman@dssb.io
+ */
 @ExtensionMethod({ Nulls.class, extensions.class })
 public class ConstructorSupplierFinder extends MethodSupplierFinder implements IFindSupplier {
     

@@ -20,6 +20,13 @@ import dssb.objectprovider.impl.IBind;
 import dssb.objectprovider.impl.ICreateObject;
 import lombok.val;
 
+/**
+ * Binding to a factory.
+ *
+ * @param <TYPE> the type the factory can provide.
+ * 
+ * @author NawaMan -- nawaman@dssb.io
+ */
 public class FactoryBinding<TYPE> implements IBind<TYPE> {
     
     private final ICreateObject<TYPE> factory;

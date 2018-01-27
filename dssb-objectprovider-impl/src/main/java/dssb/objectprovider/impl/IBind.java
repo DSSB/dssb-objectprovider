@@ -17,6 +17,13 @@ package dssb.objectprovider.impl;
 
 import dssb.objectprovider.api.IProvideObject;
 
+/**
+ * Binding of the type to the value its return.
+ * 
+ * @param <TYPE> the type the factory can provide.
+ * 
+ * @author NawaMan -- nawaman@dssb.io
+ */
 @FunctionalInterface
 public interface IBind<TYPE> {
     

@@ -15,6 +15,11 @@
 //  ========================================================================
 package dssb.objectprovider.impl;
 
+/**
+ * Classes implementing this interface handle proving failure.
+ * 
+ * @author NawaMan -- nawaman@dssb.io
+ */
 @FunctionalInterface
 public interface IHandleProvideFailure {
     

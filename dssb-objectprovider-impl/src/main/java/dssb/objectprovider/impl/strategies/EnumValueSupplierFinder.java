@@ -23,6 +23,11 @@ import dssb.objectprovider.impl.exception.ObjectCreationException;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 
+/**
+ * This class return default enum value.
+ * 
+ * @author NawaMan -- nawaman@dssb.io
+ */
 @ExtensionMethod({ extensions.class })
 public class EnumValueSupplierFinder implements IFindSupplier {
 

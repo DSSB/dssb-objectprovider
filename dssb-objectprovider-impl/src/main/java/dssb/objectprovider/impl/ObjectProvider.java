@@ -49,9 +49,9 @@ import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
 
 /**
- * This utility class can create an object using Get.
+ * ObjectProvider can provide objects.
  * 
- * @author NawaMan
+ * @author NawaMan -- nawaman@dssb.io
  */
 @ExtensionMethod({ Nulls.class })
 public class ObjectProvider implements IProvideObject {

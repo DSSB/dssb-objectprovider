@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
  *    a public field is default instance, or
  *    a public method is a factory method.
  * 
- * @author NawaMan
+ * @author NawaMan -- nawaman@dssb.io
  */
 @Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)

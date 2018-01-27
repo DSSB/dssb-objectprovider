@@ -28,6 +28,17 @@ import dssb.utils.common.Nulls;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 
+/**
+ * This class provides value from the singleton field
+ * 
+ * <ul>
+ *  <li>the static final field</li>
+ *  <li>the same type, the Optional of the type or the Supplier of the type</li>
+ *  <li>annotated with @Default</li>
+ * </ul>
+ * 
+ * @author NawaMan -- nawaman@dssb.io
+ */
 @ExtensionMethod({ Nulls.class, extensions.class })
 public class SingletonFieldFinder implements IFindSupplier {
 
