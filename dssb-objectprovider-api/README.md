@@ -1,3 +1,3 @@
 # ObjectProvider
 
-This project contains the API.
+This project contains the API for DSSB ObjectProvider.
