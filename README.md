@@ -1,6 +1,6 @@
 # ObjectProvider
 
-![alt status](https://travis-ci.org/DSSB/objectprovider.svg?branch=master)
+[![Build Status](https://travis-ci.org/DSSB/dssb-objectprovider.svg?branch=master)](https://travis-ci.org/DSSB/dssb-objectprovider)
 
 ## NOTE: This README.md is a work in progress.
 
