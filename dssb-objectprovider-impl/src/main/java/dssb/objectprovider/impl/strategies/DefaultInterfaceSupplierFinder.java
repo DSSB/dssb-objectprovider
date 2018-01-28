@@ -19,7 +19,7 @@ import static dssb.objectprovider.impl.strategies.common.NullSupplier;
 
 import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
-import dssb.utils.common.Nulls;
+import dssb.utils.common.UNulls;
 import lombok.experimental.ExtensionMethod;
 
 /**
@@ -27,7 +27,7 @@ import lombok.experimental.ExtensionMethod;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ Nulls.class, extensions.class })
+@ExtensionMethod({ UNulls.class, extensions.class })
 public class DefaultInterfaceSupplierFinder implements IFindSupplier {
 
     @SuppressWarnings("unchecked")

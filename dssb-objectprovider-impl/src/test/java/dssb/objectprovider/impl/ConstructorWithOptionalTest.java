@@ -22,10 +22,10 @@ import java.util.Optional;
 import org.junit.Test;
 
 import dssb.objectprovider.impl.annotations.Nullable;
-import dssb.utils.common.Nulls;
+import dssb.utils.common.UNulls;
 import lombok.experimental.ExtensionMethod;
 
-@ExtensionMethod({ Nulls.class })
+@ExtensionMethod({ UNulls.class })
 public class ConstructorWithOptionalTest {
     
     private ObjectProvider provider = new ObjectProvider();
@@ -34,7 +34,7 @@ public class ConstructorWithOptionalTest {
         public String name();
     }
     
-    @ExtensionMethod({ Nulls.class })
+    @ExtensionMethod({ UNulls.class })
     public static class Employee {
         private Department department;
         public Employee(Optional<Department> department) {
@@ -57,7 +57,7 @@ public class ConstructorWithOptionalTest {
         }
     }
     
-    @ExtensionMethod({ Nulls.class })
+    @ExtensionMethod({ UNulls.class })
     public static class Executive {
         private Optional<Salary> salary;
         public Executive(@Nullable Optional<Salary> salary) {

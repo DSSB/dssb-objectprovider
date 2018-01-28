@@ -22,10 +22,10 @@ import java.lang.annotation.RetentionPolicy;
 
 import org.junit.Test;
 
-import dssb.utils.common.Nulls;
+import dssb.utils.common.UNulls;
 import lombok.experimental.ExtensionMethod;
 
-@ExtensionMethod({ Nulls.class })
+@ExtensionMethod({ UNulls.class })
 public class ConstructorTest {
     
     private ObjectProvider provider = new ObjectProvider();

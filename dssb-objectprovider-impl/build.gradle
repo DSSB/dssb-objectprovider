@@ -6,7 +6,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.16.16'
 
     compile 'dssb-failable:dssb-failable-api:1.0.0'
-    compile 'dssb-utils:dssb-utils-common:1.0.3'
+    compile 'dssb-utils:dssb-utils-common:2.0.0'
     
     //== Test ==
     

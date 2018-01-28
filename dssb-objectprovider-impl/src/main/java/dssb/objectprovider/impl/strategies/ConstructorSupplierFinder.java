@@ -23,7 +23,7 @@ import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.annotations.Inject;
 import dssb.objectprovider.impl.exception.ObjectCreationException;
-import dssb.utils.common.Nulls;
+import dssb.utils.common.UNulls;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 
@@ -32,7 +32,7 @@ import lombok.experimental.ExtensionMethod;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ Nulls.class, extensions.class })
+@ExtensionMethod({ UNulls.class, extensions.class })
 public class ConstructorSupplierFinder extends MethodSupplierFinder implements IFindSupplier {
     
     public static final String INJECT = Inject.class.getSimpleName();

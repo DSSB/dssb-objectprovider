@@ -41,7 +41,7 @@ import dssb.objectprovider.impl.strategies.FactoryMethodSupplierFinder;
 import dssb.objectprovider.impl.strategies.IFindSupplier;
 import dssb.objectprovider.impl.strategies.NullSupplierFinder;
 import dssb.objectprovider.impl.strategies.SingletonFieldFinder;
-import dssb.utils.common.Nulls;
+import dssb.utils.common.UNulls;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.val;
@@ -53,7 +53,7 @@ import lombok.experimental.ExtensionMethod;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ Nulls.class })
+@ExtensionMethod({ UNulls.class })
 public class ObjectProvider implements IProvideObject {
     
     // Stepping stone

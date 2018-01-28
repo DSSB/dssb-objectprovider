@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import dssb.utils.common.Nulls;
+import dssb.utils.common.UNulls;
 import lombok.NonNull;
 import lombok.experimental.ExtensionMethod;
 
@@ -29,7 +29,7 @@ import lombok.experimental.ExtensionMethod;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ Nulls.class })
+@ExtensionMethod({ UNulls.class })
 public class Bindings {
     
     @SuppressWarnings("rawtypes")

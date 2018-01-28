@@ -22,7 +22,7 @@ import java.util.Objects;
 
 import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
-import dssb.utils.common.Nulls;
+import dssb.utils.common.UNulls;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 
@@ -31,7 +31,7 @@ import lombok.experimental.ExtensionMethod;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ Nulls.class, extensions.class })
+@ExtensionMethod({ UNulls.class, extensions.class })
 public class DefautImplementationSupplierFinder implements IFindSupplier {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
