@@ -144,14 +144,6 @@ public class ObjectProvider implements IProvideObject {
         return unmodifiableList(finderList);
     }
     
-    public ObjectProvider withNewCache() {
-        return new ObjectProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
-    }
-    
-    public ObjectProvider withSharedCache() {
-        return new ObjectProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
-    }
-    
     public ObjectProvider wihtProvideFailureHandler(IHandleProvideFailure provideFailureHandler) {
         return new ObjectProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
     }
