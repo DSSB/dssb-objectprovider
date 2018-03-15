@@ -15,10 +15,19 @@
 //  ========================================================================
 package dssb.objectprovider.impl;
 
-import org.junit.Ignore;
+import java.util.Optional;
+import java.util.function.Supplier;
+
 import org.junit.Test;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import dssb.objectprovider.impl.annotations.Nullable;
 import dssb.objectprovider.impl.exception.CyclicDependencyDetectedException;
+import dssb.objectprovider.impl.exception.ObjectCreationException;
+import lombok.val;
 
 @SuppressWarnings("javadoc")
 public class CyclicDependencyDetectionTest {
@@ -31,10 +40,56 @@ public class CyclicDependencyDetectionTest {
         }
     }
     
-    @Ignore("Entanglement")
-    @Test(expected=CyclicDependencyDetectedException.class)
+    @Test
     public void testThat_whenDefaultConstructorAskForItself_expectCyclicDependencyDetectedException() {
-        provider.get(Cyclic1.class);
+        try {
+            provider.get(Cyclic1.class);
+            fail("Expect an exception");
+        } catch (ObjectCreationException e) {
+            assertTrue(e.getCause() instanceof CyclicDependencyDetectedException);
+        }
+    }
+    
+    public static class Cyclic2 {
+        
+        public Cyclic2(Optional<Cyclic2> another) {
+        }
+    }
+    
+    @Test
+    public void testThat_whenDefaultConstructorAskForItself_expectCyclicDependencyDetectedException_evenWithOptional() {
+        try {
+            provider.get(Cyclic2.class);
+        } catch (ObjectCreationException e) {
+            assertTrue(e.getCause() instanceof CyclicDependencyDetectedException);
+        }
+    }
+    
+    public static class Cyclic3 {
+        
+        public Cyclic3(@Nullable Cyclic3 another) {
+        }
+    }
+    
+    @Test
+    public void testThat_whenDefaultConstructorAskForItself_expectCyclicDependencyDetectedException_evenWithNullable() {
+        try {
+            provider.get(Cyclic3.class);
+        } catch (ObjectCreationException e) {
+            assertTrue(e.getCause() instanceof CyclicDependencyDetectedException);
+        }
+    }
+    
+    public static class Cyclic4 {
+        
+        public Cyclic4(Supplier<Cyclic4> another) {
+        }
+    }
+    
+    @Test
+    public void testThat_whenDefaultConstructorAskForSupplierItself_itGetOne() {
+        val cyclic4 = provider.get(Cyclic4.class);
+        assertNotNull(cyclic4);
     }
     
 }

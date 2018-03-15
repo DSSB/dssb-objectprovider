@@ -15,19 +15,18 @@
 //  ========================================================================
 package dssb.objectprovider.impl;
 
-import static org.junit.Assert.assertEquals;
-
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 import org.junit.Test;
 
-import dssb.objectprovider.impl.bindings.InstanceBinding;
+import static org.junit.Assert.assertEquals;
+
+import dssb.objectprovider.impl.bindings.FactoryBinding;
 import lombok.val;
 
 @SuppressWarnings("javadoc")
 public class ConstructorWithSupplierTest {
-    
-    private ObjectProvider provider = new ObjectProvider();
     
     public static class Company {
         private Supplier<Integer> revenueSupplier;
@@ -41,14 +40,17 @@ public class ConstructorWithSupplierTest {
     
     @Test
     public void testThat_withSupplierAsParameter_aSupplierToGetIsGiven() {
-        val bindings = new Bindings.Builder()
-                .bind(Integer.class, new InstanceBinding<>(10000))
-                .build();
-        provider = provider.wihtBindings(bindings);
+        val counter        = new AtomicInteger(1000);
+        val factoryBinding = new FactoryBinding<Integer>(objectProvider->counter.getAndIncrement());
+        
+        val bindings = new Bindings.Builder().bind(Integer.class, factoryBinding).build();
+        val provider = new ObjectProvider().wihtBindings(bindings);
         
         val company = provider.get(Company.class);
         
-        assertEquals(10000, company.revenue());
+        assertEquals(1000, company.revenue());
+        assertEquals(1001, company.revenue());
+        assertEquals(1002, company.revenue());
     }
     
 }

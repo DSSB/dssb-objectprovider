@@ -15,11 +15,12 @@
 //  ========================================================================
 package dssb.objectprovider.impl;
 
-import static org.junit.Assert.assertNull;
-
 import java.util.Optional;
 
 import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import dssb.objectprovider.impl.annotations.Nullable;
 import dssb.utils.common.UNulls;
@@ -30,6 +31,8 @@ import lombok.experimental.ExtensionMethod;
 public class ConstructorWithOptionalTest {
     
     private ObjectProvider provider = new ObjectProvider();
+    
+    //== Interface has no defaults so not filled when optional.
     
     public static interface Department {
         public String name();
@@ -51,11 +54,28 @@ public class ConstructorWithOptionalTest {
         assertNull(provider.get(Employee.class).departmentName());
     }
     
+    //== Class has default, so attempt to fill that in.
     
     public static class Salary {
         public Salary() {
             throw new RuntimeException("Too much");
         }
+    }
+
+    @ExtensionMethod({ UNulls.class })
+    public static class Manager {
+        private Optional<Salary> salary;
+        public Manager(Optional<Salary> salary) {
+            this.salary = salary;
+        }
+        public Optional<Salary> salary() {
+            return salary;
+        }
+    }
+    
+    @Test
+    public void testOptionalParameterWithValue() {
+        assertNotNull(provider.get(Manager.class).salary());
     }
     
     @ExtensionMethod({ UNulls.class })
@@ -71,7 +91,6 @@ public class ConstructorWithOptionalTest {
     
     @Test
     public void testThat_nullIsGivenToNullableOptionalParameterIfTheValueCannotBeObtainedDueToException() {
-        // Since Department is an interface an no default is given, so its value can't be found.
         assertNull(provider.get(Executive.class).salary());
     }
     

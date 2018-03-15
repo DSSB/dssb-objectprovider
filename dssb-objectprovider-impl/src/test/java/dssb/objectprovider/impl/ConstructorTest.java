@@ -31,6 +31,8 @@ public class ConstructorTest {
     
     private ObjectProvider provider = new ObjectProvider();
     
+    //== Regular class ==
+    
     public static class Car {
         public String zoom() {
             return "FLASH!";
@@ -38,11 +40,11 @@ public class ConstructorTest {
     }
     
     @Test
-    public void testThat_useDefaultConstructorToProvideTheValue() {
+    public void testRegularClass_useDefaultConstructorToProvideTheValue() {
         assertEquals("FLASH!",  provider.get(Car.class).zoom());
     }
     
-    // ==
+    // == More Dependent class ==
     
     public static class Driver {
         private Car car;
@@ -59,11 +61,12 @@ public class ConstructorTest {
         assertEquals("FLASH!", provider.get(Driver.class).zoom());
     }
     
-    public static class SuperCar extends Car {
-        public String zoom() {
-            return "SUPER FLASH!!!!";
-        }
+    @Test
+    public void testDependendClass_theProviderFigureTheDependenct() {
+        assertEquals("FLASH!", provider.get(Driver.class).zoom());
     }
+    
+    //== Multiple Constructor
     
     public static class Person {
         private Car car;
@@ -82,6 +85,8 @@ public class ConstructorTest {
     public void testDefaultConstructor() {
         assertEquals("Meh", provider.get(Person.class).zoom());
     }
+    
+    //== Injected Constructor ==
     
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Inject {
