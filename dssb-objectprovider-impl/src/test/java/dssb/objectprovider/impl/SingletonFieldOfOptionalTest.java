@@ -24,6 +24,7 @@ import java.util.Optional;
 
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class SingletonFieldOfOptionalTest {
     
     private ObjectProvider provider = new ObjectProvider();

@@ -15,16 +15,17 @@
 //  ========================================================================
 package dssb.objectprovider.impl;
 
-import static org.junit.Assert.assertEquals;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 import dssb.utils.common.UNulls;
 import lombok.experimental.ExtensionMethod;
 
+@SuppressWarnings("javadoc")
 @ExtensionMethod({ UNulls.class })
 public class ConstructorTest {
     

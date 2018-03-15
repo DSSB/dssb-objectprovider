@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class FactoryMethodReturningOptionalTest {
     
     private ObjectProvider provider = new ObjectProvider();

@@ -25,6 +25,7 @@ import dssb.objectprovider.impl.annotations.Nullable;
 import dssb.utils.common.UNulls;
 import lombok.experimental.ExtensionMethod;
 
+@SuppressWarnings("javadoc")
 @ExtensionMethod({ UNulls.class })
 public class ConstructorWithOptionalTest {
     

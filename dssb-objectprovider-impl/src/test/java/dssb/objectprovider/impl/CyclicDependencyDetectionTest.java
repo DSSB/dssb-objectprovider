@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import dssb.objectprovider.impl.exception.CyclicDependencyDetectedException;
 
+@SuppressWarnings("javadoc")
 public class CyclicDependencyDetectionTest {
     
     private ObjectProvider provider = new ObjectProvider();

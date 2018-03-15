@@ -24,6 +24,7 @@ import org.junit.Test;
 import dssb.objectprovider.impl.bindings.InstanceBinding;
 import lombok.val;
 
+@SuppressWarnings("javadoc")
 public class ConstructorWithSupplierTest {
     
     private ObjectProvider provider = new ObjectProvider();

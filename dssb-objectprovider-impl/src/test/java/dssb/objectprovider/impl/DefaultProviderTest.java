@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import dssb.objectprovider.api.IProvideObject;
 
+@SuppressWarnings("javadoc")
 public class DefaultProviderTest {
     
     @Test

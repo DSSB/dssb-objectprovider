@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import dssb.failable.Failable;
 
+@SuppressWarnings("javadoc")
 public class FactoryMethodReturningSupplierTest {
     
     private ObjectProvider provider = new ObjectProvider();
@@ -79,6 +80,16 @@ public class FactoryMethodReturningSupplierTest {
                 return new SupplierFactoryMethodFactoryMethod("factory");
             };
         }
+        
+        public static int getCounter() {
+            return counter;
+        }
+        
+        public String getString() {
+            return string;
+        }
+        
+        
     }
     
     @Test

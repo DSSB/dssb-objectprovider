@@ -22,6 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class DefaultToNullTest {
     
     private ObjectProvider provider = new ObjectProvider();

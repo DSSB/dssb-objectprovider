@@ -15,12 +15,12 @@
 //  ========================================================================
 package dssb.objectprovider.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.bindings.FactoryBinding;
@@ -28,6 +28,7 @@ import dssb.objectprovider.impl.bindings.InstanceBinding;
 import dssb.objectprovider.impl.bindings.TypeBinding;
 import lombok.val;
 
+@SuppressWarnings("javadoc")
 public class BindingTest {
     
     @Test
