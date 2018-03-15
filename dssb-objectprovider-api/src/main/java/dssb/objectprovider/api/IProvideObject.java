@@ -30,6 +30,7 @@ public interface IProvideObject {
     /**
      * Returns the object for the given class.
      * 
+     * @param <TYPE>  the data type represented by the given class.
      * @param theGivenClass
      *          the given class.
      * @return  the object associated with the given class.

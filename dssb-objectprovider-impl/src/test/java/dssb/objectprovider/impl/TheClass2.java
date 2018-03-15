@@ -15,7 +15,8 @@
 //  ========================================================================
 package dssb.objectprovider.impl;
 
-public class TheClass2 implements DefaultImplementationTest.TheInterface2 {
+@SuppressWarnings("javadoc")
+public class TheClass2 implements ImplementedByTest.TheInterface2 {
     
     public static final String TEXT = "I am class 2.";
     

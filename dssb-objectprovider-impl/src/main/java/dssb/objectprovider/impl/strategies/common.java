@@ -19,6 +19,7 @@ import dssb.failable.Failable.Supplier;
 
 class common {
 
+    @SuppressWarnings("rawtypes")
     public static final Supplier NullSupplier = ()->null;
     
 }

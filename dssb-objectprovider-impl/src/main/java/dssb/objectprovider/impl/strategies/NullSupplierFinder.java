@@ -30,6 +30,7 @@ import lombok.experimental.ExtensionMethod;
 @ExtensionMethod({ extensions.class })
 public class NullSupplierFinder implements IFindSupplier {
     
+    /** The name of the DefaultToNull annotation */
     public static final String ANNOTATION_NAME = DefaultToNull.class.getSimpleName();
     
     @SuppressWarnings("unchecked")

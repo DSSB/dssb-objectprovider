@@ -35,6 +35,7 @@ import lombok.experimental.ExtensionMethod;
 @ExtensionMethod({ UNulls.class, extensions.class })
 public class ConstructorSupplierFinder extends MethodSupplierFinder implements IFindSupplier {
     
+    /** The name of the Inject annotation */
     public static final String INJECT = Inject.class.getSimpleName();
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -96,10 +97,24 @@ public class ConstructorSupplierFinder extends MethodSupplierFinder implements I
         return params;
     }
     
-    public static <T> boolean hasOnlyOneConsructor(final java.lang.Class<T> clzz) {
+    /**
+     * Check if there is only one constructor.
+     * 
+     * @param <T>   the data type that the class represent.
+     * @param clzz  the data class.
+     * @return  {@code true} if there is only one consturctor.
+     */
+    public static <T> boolean hasOnlyOneConsructor(final Class<T> clzz) {
         return clzz.getConstructors().length == 1;
     }
     
+    /**
+     * Find a constructor with Inject annotation.
+     * 
+     * @param <T>   the data type the given class represent.
+     * @param clzz  the data class.
+     * @return  the constructor found.
+     */
     @SuppressWarnings("unchecked")
     public static <T> Constructor<T> findConstructorWithInject(Class<T> clzz) {
         for(Constructor<?> constructor : clzz.getConstructors()) {
@@ -112,6 +127,13 @@ public class ConstructorSupplierFinder extends MethodSupplierFinder implements I
         return null;
     }
     
+    /**
+     * Find the constructor with no arguments.
+     * 
+     * @param <T>   the dada type that the clzz represents..
+     * @param clzz  the data class.
+     * @return  the constructor.
+     */
     public static <T> Constructor<T> getNoArgConstructor(Class<T> clzz) {
         try {
             return clzz.getDeclaredConstructor();
@@ -122,6 +144,13 @@ public class ConstructorSupplierFinder extends MethodSupplierFinder implements I
         }
     }
     
+    /**
+     * Find the only constructor of the given class.
+     * 
+     * @param <T>   the data type that the clzz represent.
+     * @param clzz  the clzz.
+     * @return  the  constructor found.
+     */
     public static <T> Constructor<?> getOnlyConstructor(Class<T> clzz) {
         return clzz.getConstructors()[0];
     }

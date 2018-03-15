@@ -31,6 +31,11 @@ public class FactoryBinding<TYPE> implements IBind<TYPE> {
     
     private final ICreateObject<TYPE> factory;
     
+    /**
+     * Constructs a factory binding using the the factory.
+     * 
+     * @param factory  the factory to create the object.
+     */
     public FactoryBinding(ICreateObject<TYPE> factory) {
         this.factory = factory;
     }

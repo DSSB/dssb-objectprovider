@@ -27,6 +27,12 @@ import dssb.objectprovider.api.IProvideObject;
 @FunctionalInterface
 public interface ICreateObject<TYPE> {
     
+    /**
+     * Create the object.
+     * 
+     * @param objectProvider  the object provider.
+     * @return  the newly created object.
+     */
     public TYPE create(IProvideObject objectProvider);
     
 }

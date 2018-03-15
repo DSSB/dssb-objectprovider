@@ -26,6 +26,15 @@ import dssb.objectprovider.api.IProvideObject;
 @FunctionalInterface
 public interface IFindSupplier {
     
+    /**
+     * Find a supplier to supplier value
+     * 
+     * @param <TYPE>          the data type.
+     * @param <THROWABLE>     the exception.
+     * @param theGivenClass   the data class.
+     * @param objectProvider  the object provider.
+     * @return  the supplier for the value.
+     */
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>    theGivenClass,
             IProvideObject objectProvider);

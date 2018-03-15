@@ -15,9 +15,6 @@
 //  ========================================================================
 package dssb.objectprovider.impl;
 
-import static java.util.Collections.EMPTY_LIST;
-import static java.util.Collections.unmodifiableList;
-
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +24,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.util.Collections.EMPTY_LIST;
+import static java.util.Collections.unmodifiableList;
+
 import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.api.ProvideObjectException;
@@ -35,10 +35,10 @@ import dssb.objectprovider.impl.exception.CyclicDependencyDetectedException;
 import dssb.objectprovider.impl.exception.ObjectCreationException;
 import dssb.objectprovider.impl.strategies.ConstructorSupplierFinder;
 import dssb.objectprovider.impl.strategies.DefaultInterfaceSupplierFinder;
-import dssb.objectprovider.impl.strategies.DefautImplementationSupplierFinder;
 import dssb.objectprovider.impl.strategies.EnumValueSupplierFinder;
 import dssb.objectprovider.impl.strategies.FactoryMethodSupplierFinder;
 import dssb.objectprovider.impl.strategies.IFindSupplier;
+import dssb.objectprovider.impl.strategies.ImplementedBySupplierFinder;
 import dssb.objectprovider.impl.strategies.NullSupplierFinder;
 import dssb.objectprovider.impl.strategies.SingletonFieldFinder;
 import dssb.utils.common.UNulls;
@@ -68,7 +68,7 @@ public class ObjectProvider implements IProvideObject {
     
     
     private static final List<IFindSupplier> classLevelfinders = Arrays.asList(
-            new DefautImplementationSupplierFinder(),
+            new ImplementedBySupplierFinder(),
             new NullSupplierFinder(),
             new EnumValueSupplierFinder(),
             new DefaultInterfaceSupplierFinder()
@@ -98,11 +98,20 @@ public class ObjectProvider implements IProvideObject {
     
     private List<IFindSupplier>  additionalSupplierFinders;
     
+    /**
+     * Constructs the ObjectProvider without any configuration.
+     **/
     public ObjectProvider() {
         this(null, null, null, null);
     }
-    
-    @SuppressWarnings("rawtypes")
+
+    /**
+     * Constructs the ObjectProvider with configurations.
+     * @param parent                     the parent Object provider.
+     * @param additionalSupplierFinders  additional supplier finders.
+     * @param bingings                   the bindings.
+     * @param provideFailureHandler      the handler for provide failure.
+     **/
     public ObjectProvider(
             IProvideObject        parent,
             List<IFindSupplier>   additionalSupplierFinders,
@@ -117,7 +126,9 @@ public class ObjectProvider implements IProvideObject {
         this.additionalSupplierFinders = additionalSupplierFinders;
     }
     
-    // TODO - Pipeable
+    /**
+     * Create a builder for the ObjectProvider.
+     */
     @Setter
     @AllArgsConstructor
     @Accessors(fluent=true,chain=true)
@@ -127,10 +138,18 @@ public class ObjectProvider implements IProvideObject {
         private Bindings              bingings;
         private IHandleProvideFailure provideFailureHandler;
         
+        /**
+         * Constructs a builder with all default configurations.
+         */
         public Builder() {
             this(null, null, null, null);
         }
         
+        /**
+         * Build the ObjectProider.
+         * 
+         * @return  the newly built ObjectProvider.
+         */
         public ObjectProvider build() {
             return new ObjectProvider(parent, additionalSupplierFinders, bingings, provideFailureHandler);
         }
@@ -144,12 +163,24 @@ public class ObjectProvider implements IProvideObject {
         return unmodifiableList(finderList);
     }
     
+    /**
+     * Create a new provider with the given provide failure provider.
+     * 
+     * @param provideFailureHandler  the handler.
+     * @return  a new object provider with all configuration of this provider except for the handler.
+     */
     public ObjectProvider wihtProvideFailureHandler(IHandleProvideFailure provideFailureHandler) {
         return new ObjectProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
     }
     
-    public ObjectProvider wihtBindings(Bindings binidings) {
-        return new ObjectProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
+    /**
+     * Create a new provider with the given provide failure provider.
+     * 
+     * @param bindings  the provision bindings.
+     * @return  a new object provider with all configuration of this provider except for the bindings.
+     */
+    public ObjectProvider wihtBindings(Bindings bindings) {
+        return new ObjectProvider(parent, additionalSupplierFinders, bindings, provideFailureHandler);
     }
     
     /**

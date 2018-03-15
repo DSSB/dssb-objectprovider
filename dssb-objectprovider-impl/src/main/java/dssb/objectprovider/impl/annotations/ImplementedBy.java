@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
  */
 @Target(value=ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DefaultImplementation {
+public @interface ImplementedBy {
     
     /** The name of the implementation class. */
     public String value();

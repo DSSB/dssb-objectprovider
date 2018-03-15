@@ -39,21 +39,45 @@ public class Bindings {
         this.bindings = Collections.unmodifiableMap(new HashMap<>(bindings));
     }
     
+    /**
+     * Returns the bindings for the given class.
+     * 
+     * @param <TYPE>  the data type.
+     * @param clzz    the data class.
+     * @return  the binding for the class.
+     */
     @SuppressWarnings("unchecked")
     public <TYPE> IBind<TYPE> getBinding(Class<TYPE> clzz) {
         return (IBind<TYPE>)this.bindings.get(clzz);
     }
     
+    /**
+     * Creates a binder for the given type.
+     */
     public static class Builder {
         
+        @SuppressWarnings("rawtypes")
         private final Map<Class, IBind> bindings = new HashMap<>();
         
+        /**
+         * Bind the binding to the class.
+         * 
+         * @param <TYPE>   the data type.
+         * @param clzz     the data class.
+         * @param binding  the bind to be match with this class.
+         * @return this binding builder.
+         */
         public <TYPE> Builder bind(@NonNull Class<TYPE> clzz, IBind<TYPE> binding) {
             if (binding.isNotNull())
                 this.bindings.put(clzz, binding);
             return this;
         }
         
+        /**
+         * Build the binding as specified.
+         * 
+         * @return the newly created binding.
+         */
         public Bindings build() {
             return new Bindings(bindings);
         }

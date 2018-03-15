@@ -27,6 +27,12 @@ import dssb.objectprovider.api.IProvideObject;
 @FunctionalInterface
 public interface IBind<TYPE> {
     
+    /**
+     * Get the bounded object.
+     * 
+     * @param objectProvider  the object provider.
+     * @return  the bound object.
+     */
     public TYPE get(IProvideObject objectProvider);
     
 }

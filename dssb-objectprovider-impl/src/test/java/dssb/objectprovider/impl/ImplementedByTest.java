@@ -15,31 +15,32 @@
 //  ========================================================================
 package dssb.objectprovider.impl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import dssb.utils.common.UNulls;
 import lombok.experimental.ExtensionMethod;
 
+@SuppressWarnings("javadoc")
 @ExtensionMethod({ UNulls.class })
-public class DefaultImplementationTest {
+public class ImplementedByTest {
     
     private ObjectProvider provider = new ObjectProvider();
     
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface DefaultImplementation {
+    public @interface ImplementedBy {
         
         public String value();
         
     }
     
     
-    @DefaultImplementation("dssb.objectprovider.impl.TheClass2")
+    @ImplementedBy("dssb.objectprovider.impl.TheClass2")
     public static interface TheInterface2 {
         
         public String getText();
@@ -66,7 +67,7 @@ public class DefaultImplementationTest {
         assertEquals(TheClass2.TEXT, provider.get(TheInterface2User.class).getText());
     }
 
-    @DefaultImplementation("directget.get.TheClassThatDoesNotExist")
+    @ImplementedBy("directget.get.TheClassThatDoesNotExist")
     public static interface TheInterface3 {
         
         public String getText();

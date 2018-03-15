@@ -30,6 +30,11 @@ public class TypeBinding<TYPE> implements IBind<TYPE> {
     
     private final Class<? extends TYPE> referedType;
     
+    /**
+     * Constructs a type binding.
+     * 
+     * @param referedType  the refered type.
+     */
     public TypeBinding(Class<? extends TYPE> referedType) {
         this.referedType = referedType;
     }

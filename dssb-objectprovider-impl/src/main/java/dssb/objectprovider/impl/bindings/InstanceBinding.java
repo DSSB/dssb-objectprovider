@@ -29,6 +29,11 @@ public class InstanceBinding<TYPE> implements IBind<TYPE> {
     
     private final TYPE instance;
     
+    /**
+     * Constructs an instant binding.
+     * 
+     * @param instance  the instant to bind.
+     */
     public InstanceBinding(TYPE instance) {
         this.instance = instance;
     }

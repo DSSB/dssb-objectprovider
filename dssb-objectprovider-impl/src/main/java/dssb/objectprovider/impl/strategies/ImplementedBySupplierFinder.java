@@ -32,14 +32,14 @@ import lombok.experimental.ExtensionMethod;
  * @author NawaMan -- nawaman@dssb.io
  */
 @ExtensionMethod({ UNulls.class, extensions.class })
-public class DefautImplementationSupplierFinder implements IFindSupplier {
+public class ImplementedBySupplierFinder implements IFindSupplier {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>    theGivenClass,
             IProvideObject objectProvider) {
-        if (theGivenClass.getAnnotations().hasAnnotation("DefaultImplementation")) {
+        if (theGivenClass.getAnnotations().hasAnnotation("ImplementedBy")) {
             val defaultImplementationClass = findDefaultImplementation(theGivenClass);
             if (defaultImplementationClass.isNotNull()) {
                 return new Supplier() {
@@ -60,7 +60,7 @@ public class DefautImplementationSupplierFinder implements IFindSupplier {
         return stream(theGivenClass.getAnnotations())
             .map(Object::toString)
             .map(toString->toString.replaceAll("^(.*\\(value=)(.*)(\\))$", "$2"))
-            .map(DefautImplementationSupplierFinder::findClass)
+            .map(ImplementedBySupplierFinder::findClass)
             .filter(Objects::nonNull)
             .filter(theGivenClass::isAssignableFrom)
             .findAny()

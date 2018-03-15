@@ -42,12 +42,12 @@ import lombok.experimental.ExtensionMethod;
 @ExtensionMethod({ UNulls.class, extensions.class })
 public class SingletonFieldFinder implements IFindSupplier {
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "unchecked" })
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>    theGivenClass,
             IProvideObject objectProvider) {
-        val fieldValue = findValueFromSingletonField(theGivenClass);
+        Supplier<TYPE, THROWABLE> fieldValue = findValueFromSingletonField(theGivenClass);
         if (fieldValue.isNotNull())
             return (Supplier<TYPE, THROWABLE>) fieldValue;
         
