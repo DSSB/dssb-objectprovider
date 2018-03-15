@@ -37,7 +37,7 @@ import lombok.experimental.ExtensionMethod;
 @ExtensionMethod({ UNulls.class, extensions.class })
 public class FactoryMethodSupplierFinder extends MethodSupplierFinder implements IFindSupplier {
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "unchecked" })
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>    theGivenClass,
@@ -49,9 +49,9 @@ public class FactoryMethodSupplierFinder extends MethodSupplierFinder implements
         return null;
     }
     
-    @SuppressWarnings({ "rawtypes"})
-    private <T> Supplier findValueFromFactoryMethod(Class<T> theGivenClass, IProvideObject objectProvider) {
-        return (Supplier)stream(theGivenClass.getDeclaredMethods())
+    @SuppressWarnings("unchecked")
+    private <T> Supplier<T, ? extends Throwable> findValueFromFactoryMethod(Class<T> theGivenClass, IProvideObject objectProvider) {
+        return (Supplier<T, ? extends Throwable>)stream(theGivenClass.getDeclaredMethods())
                 .filter(method->Modifier.isStatic(method.getModifiers()))
                 .filter(method->Modifier.isPublic(method.getModifiers()))
                 .filter(method->extensions.hasAnnotation(method.getAnnotations(), "Default"))
