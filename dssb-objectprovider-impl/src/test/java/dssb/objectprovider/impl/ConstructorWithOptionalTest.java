@@ -80,8 +80,36 @@ public class ConstructorWithOptionalTest {
     
     @ExtensionMethod({ UNulls.class })
     public static class ExecutiveNullable {
+        private Salary salary;
+        public ExecutiveNullable(@Nullable Salary salary) {
+            this.salary = salary;
+        }
+        public Salary salary() {
+            return salary;
+        }
+    }
+    
+    @ExtensionMethod({ UNulls.class })
+    public static class ExecutiveOptional {
+        private Salary salary;
+        public ExecutiveOptional(@dssb.objectprovider.impl.annotations.Optional Salary salary) {
+            this.salary = salary;
+        }
+        public Salary salary() {
+            return salary;
+        }
+    }
+    
+    @Test
+    public void testThat_nullIsGivenToNullableOrOptionalParameterIfTheValueCannotBeObtainedDueToException() {
+        assertNull(provider.get(ExecutiveNullable.class).salary());
+        assertNull(provider.get(ExecutiveOptional.class).salary());
+    }
+    
+    @ExtensionMethod({ UNulls.class })
+    public static class OwnerNullable {
         private Optional<Salary> salary;
-        public ExecutiveNullable(@Nullable Optional<Salary> salary) {
+        public OwnerNullable(@Nullable Optional<Salary> salary) {
             this.salary = salary;
         }
         public Optional<Salary> salary() {
@@ -90,9 +118,9 @@ public class ConstructorWithOptionalTest {
     }
     
     @ExtensionMethod({ UNulls.class })
-    public static class ExecutiveOptional {
+    public static class OwnerOptional {
         private Optional<Salary> salary;
-        public ExecutiveOptional(@dssb.objectprovider.impl.annotations.Optional Optional<Salary> salary) {
+        public OwnerOptional(@dssb.objectprovider.impl.annotations.Optional Optional<Salary> salary) {
             this.salary = salary;
         }
         public Optional<Salary> salary() {
@@ -102,7 +130,7 @@ public class ConstructorWithOptionalTest {
     
     @Test
     public void testThat_nullIsGivenToNullableOptionalParameterIfTheValueCannotBeObtainedDueToException() {
-        assertNull(provider.get(ExecutiveNullable.class).salary());
-        assertNull(provider.get(ExecutiveOptional.class).salary());
+        assertNull(provider.get(OwnerNullable.class).salary());
+        assertNull(provider.get(OwnerOptional.class).salary());
     }
 }
