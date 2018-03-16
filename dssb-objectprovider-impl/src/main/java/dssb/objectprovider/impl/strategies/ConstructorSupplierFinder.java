@@ -88,9 +88,8 @@ public class ConstructorSupplierFinder extends MethodSupplierFinder implements I
             val param             = paramsArray[i];
             val paramType         = param.getType();
             val parameterizedType = param.getParameterizedType();
-            // TODO - The method itself can be set to @Nullable or @NotNull
-            //          the at the parameter level, we can flag it reversely.
-            boolean isNullable    = param.getAnnotations().hasAnnotation("Nullable");
+            boolean isNullable    = param.getAnnotations().hasAnnotation("Nullable")
+                                 || param.getAnnotations().hasAnnotation("Optional");
             Object paramValue     = getParameterValue(paramType, parameterizedType, isNullable, objectProvider);
             params[i] = paramValue;
         }

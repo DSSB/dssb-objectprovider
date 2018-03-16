@@ -79,9 +79,20 @@ public class ConstructorWithOptionalTest {
     }
     
     @ExtensionMethod({ UNulls.class })
-    public static class Executive {
+    public static class ExecutiveNullable {
         private Optional<Salary> salary;
-        public Executive(@Nullable Optional<Salary> salary) {
+        public ExecutiveNullable(@Nullable Optional<Salary> salary) {
+            this.salary = salary;
+        }
+        public Optional<Salary> salary() {
+            return salary;
+        }
+    }
+    
+    @ExtensionMethod({ UNulls.class })
+    public static class ExecutiveOptional {
+        private Optional<Salary> salary;
+        public ExecutiveOptional(@dssb.objectprovider.impl.annotations.Optional Optional<Salary> salary) {
             this.salary = salary;
         }
         public Optional<Salary> salary() {
@@ -91,7 +102,7 @@ public class ConstructorWithOptionalTest {
     
     @Test
     public void testThat_nullIsGivenToNullableOptionalParameterIfTheValueCannotBeObtainedDueToException() {
-        assertNull(provider.get(Executive.class).salary());
+        assertNull(provider.get(ExecutiveNullable.class).salary());
+        assertNull(provider.get(ExecutiveOptional.class).salary());
     }
-    
 }
