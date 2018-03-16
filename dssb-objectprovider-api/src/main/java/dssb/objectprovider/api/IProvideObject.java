@@ -17,8 +17,6 @@ package dssb.objectprovider.api;
 
 import java.util.Optional;
 
-import lombok.val;
-
 /**
  * Classes implementing this interface can provide an object given a class..
  * 
@@ -54,18 +52,18 @@ public interface IProvideObject {
      * @return the Optional value of the ObjectProvider if the class was in the classpath.
      */
     public static Optional<IProvideObject> defaultProvider() {
-        val providerClass      = utils.findClass(implementationClassName);
-        val isClassInClasspath = providerClass != null;
+        Class<?> providerClass      = utils.findClass(implementationClassName);
+        boolean  isClassInClasspath = providerClass != null;
         if (!isClassInClasspath)
             return Optional.empty();
         
-        val isCompatibleType = IProvideObject.class.isAssignableFrom(providerClass);
+        boolean isCompatibleType = IProvideObject.class.isAssignableFrom(providerClass);
         if (!isCompatibleType) 
             return Optional.empty();
         
         try {
-            val newInstance = providerClass.newInstance();
-            val provider    = IProvideObject.class.cast(newInstance);
+            Object         newInstance = providerClass.newInstance();
+            IProvideObject provider    = IProvideObject.class.cast(newInstance);
             return Optional.ofNullable(provider);
             
         } catch (InstantiationException | IllegalAccessException e) {
