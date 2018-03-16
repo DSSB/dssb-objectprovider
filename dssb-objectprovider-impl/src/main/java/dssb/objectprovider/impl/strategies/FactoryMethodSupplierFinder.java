@@ -23,18 +23,18 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.util.Optional;
 
-import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
-import dssb.utils.common.UNulls;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
+import nawaman.failable.Failable.Supplier;
+import nawaman.nullablej.NullableJ;
 
 /**
  * This class returns object resulting from a factory method.
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ UNulls.class, extensions.class })
+@ExtensionMethod({ NullableJ.class, extensions.class })
 public class FactoryMethodSupplierFinder extends MethodSupplierFinder implements IFindSupplier {
 
     @SuppressWarnings({ "unchecked" })
@@ -43,7 +43,7 @@ public class FactoryMethodSupplierFinder extends MethodSupplierFinder implements
             Class<TYPE>    theGivenClass,
             IProvideObject objectProvider) {
         val methodValue = findValueFromFactoryMethod(theGivenClass, objectProvider);
-        if (methodValue.isNotNull())
+        if (methodValue._isNotNull())
             return (Supplier<TYPE, THROWABLE>)methodValue;
         
         return null;

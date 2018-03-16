@@ -20,18 +20,18 @@ import static java.util.Arrays.stream;
 
 import java.util.Objects;
 
-import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
-import dssb.utils.common.UNulls;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
+import nawaman.failable.Failable.Supplier;
+import nawaman.nullablej.NullableJ;
 
 /**
  * This class get an object that is a default implementation of the target class.
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ UNulls.class, extensions.class })
+@ExtensionMethod({ NullableJ.class, extensions.class })
 public class ImplementedBySupplierFinder implements IFindSupplier {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -41,7 +41,7 @@ public class ImplementedBySupplierFinder implements IFindSupplier {
             IProvideObject objectProvider) {
         if (theGivenClass.getAnnotations().hasAnnotation("ImplementedBy")) {
             val defaultImplementationClass = findDefaultImplementation(theGivenClass);
-            if (defaultImplementationClass.isNotNull()) {
+            if (defaultImplementationClass._isNotNull()) {
                 return new Supplier() {
                     @Override
                     public Object get() throws Throwable {

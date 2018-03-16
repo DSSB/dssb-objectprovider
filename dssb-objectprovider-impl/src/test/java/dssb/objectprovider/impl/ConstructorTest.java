@@ -22,11 +22,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import dssb.utils.common.UNulls;
 import lombok.experimental.ExtensionMethod;
+import nawaman.nullablej.NullableJ;
 
 @SuppressWarnings("javadoc")
-@ExtensionMethod({ UNulls.class })
+@ExtensionMethod({ NullableJ.class })
 public class ConstructorTest {
     
     private ObjectProvider provider = new ObjectProvider();

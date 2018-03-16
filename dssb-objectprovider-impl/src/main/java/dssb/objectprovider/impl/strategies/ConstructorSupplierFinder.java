@@ -19,20 +19,20 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
-import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.annotations.Inject;
 import dssb.objectprovider.impl.exception.ObjectCreationException;
-import dssb.utils.common.UNulls;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
+import nawaman.failable.Failable.Supplier;
+import nawaman.nullablej.NullableJ;
 
 /**
  * This class get an object by invoking a constructor.
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ UNulls.class, extensions.class })
+@ExtensionMethod({ NullableJ.class, extensions.class })
 public class ConstructorSupplierFinder extends MethodSupplierFinder implements IFindSupplier {
     
     /** The name of the Inject annotation */
@@ -44,7 +44,7 @@ public class ConstructorSupplierFinder extends MethodSupplierFinder implements I
             Class<TYPE>    theGivenClass,
             IProvideObject objectProvider) {
         val constructor = findConstructor(theGivenClass);
-        if (constructor.isNotNull()) {
+        if (constructor._isNotNull()) {
             val supplier = new Supplier() {
                 public Object get() throws Throwable {
                     return callConstructor(theGivenClass, constructor, objectProvider);
@@ -58,13 +58,13 @@ public class ConstructorSupplierFinder extends MethodSupplierFinder implements I
     @SuppressWarnings({ "rawtypes" })
     private <T> Constructor findConstructor(Class<T> clzz) {
         Constructor foundConstructor = findConstructorWithInject(clzz);
-        if (foundConstructor.isNull()) {
+        if (foundConstructor._isNull()) {
             foundConstructor = hasOnlyOneConsructor(clzz)
                     ? getOnlyConstructor(clzz)
                     : getNoArgConstructor(clzz);
         }
         
-        if (foundConstructor.isNull()
+        if (foundConstructor._isNull()
          || !Modifier.isPublic(foundConstructor.getModifiers()))
             return null;
         

@@ -19,17 +19,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import dssb.utils.common.UNulls;
 import lombok.NonNull;
 import lombok.experimental.ExtensionMethod;
+import nawaman.nullablej.NullableJ;
 
-// TODO - Pipeable
 /**
  * Collections of bindings.
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ UNulls.class })
+@ExtensionMethod({ NullableJ.class })
 public class Bindings {
     
     @SuppressWarnings("rawtypes")
@@ -68,7 +67,7 @@ public class Bindings {
          * @return this binding builder.
          */
         public <TYPE> Builder bind(@NonNull Class<TYPE> clzz, IBind<TYPE> binding) {
-            if (binding.isNotNull())
+            if (binding._isNotNull())
                 this.bindings.put(clzz, binding);
             return this;
         }

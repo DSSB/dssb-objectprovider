@@ -17,10 +17,10 @@ package dssb.objectprovider.impl.strategies;
 
 import static dssb.objectprovider.impl.strategies.common.NullSupplier;
 
-import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.annotations.DefaultToNull;
 import lombok.experimental.ExtensionMethod;
+import nawaman.failable.Failable.Supplier;
 
 /**
  * This class will provider null if the given class is annotated with @DefaultToNull.

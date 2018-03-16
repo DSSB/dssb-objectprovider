@@ -23,11 +23,11 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import dssb.utils.common.UNulls;
 import lombok.experimental.ExtensionMethod;
+import nawaman.nullablej.NullableJ;
 
 @SuppressWarnings("javadoc")
-@ExtensionMethod({ UNulls.class })
+@ExtensionMethod({ NullableJ.class })
 public class ImplementedByTest {
     
     private ObjectProvider provider = new ObjectProvider();
@@ -56,7 +56,7 @@ public class ImplementedByTest {
         }
         
         public String getText() {
-            return this.i2.whenNotNull().map(TheInterface2::getText).orElse("I am TheInterface2User.");
+            return this.i2._whenNotNull().map(TheInterface2::getText).orElse("I am TheInterface2User.");
         }
         
     }
@@ -85,7 +85,7 @@ public class ImplementedByTest {
         }
         
         public String getText() {
-            return this.i3.whenNotNull().map(TheInterface3::getText).orElse(TEXT);
+            return this.i3._whenNotNull().map(TheInterface3::getText).orElse(TEXT);
         }
         
     }

@@ -15,8 +15,8 @@
 //  ========================================================================
 package dssb.objectprovider.impl.strategies;
 
-import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
+import nawaman.failable.Failable.Supplier;
 
 /**
  * Classes implementing this interface know how to find supplier for object of the given class.

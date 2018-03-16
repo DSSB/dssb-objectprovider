@@ -15,15 +15,15 @@
 //  ========================================================================
 package dssb.objectprovider.impl;
 
-import static org.junit.Assert.assertEquals;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.function.Supplier;
 
 import org.junit.Test;
 
-import dssb.failable.Failable;
+import static org.junit.Assert.assertEquals;
+
+import nawaman.failable.Failable;
 
 @SuppressWarnings("javadoc")
 public class FactoryMethodReturningSupplierTest {

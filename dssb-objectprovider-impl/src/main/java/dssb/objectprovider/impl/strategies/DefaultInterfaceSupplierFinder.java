@@ -17,17 +17,17 @@ package dssb.objectprovider.impl.strategies;
 
 import static dssb.objectprovider.impl.strategies.common.NullSupplier;
 
-import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
-import dssb.utils.common.UNulls;
 import lombok.experimental.ExtensionMethod;
+import nawaman.failable.Failable.Supplier;
+import nawaman.nullablej.NullableJ;
 
 /**
  * This class find object of interface will all default methods.
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ UNulls.class, extensions.class })
+@ExtensionMethod({ NullableJ.class, extensions.class })
 public class DefaultInterfaceSupplierFinder implements IFindSupplier {
 
     @SuppressWarnings("unchecked")

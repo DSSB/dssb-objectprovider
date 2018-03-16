@@ -20,11 +20,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
-import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
-import dssb.utils.common.UNulls;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
+import nawaman.failable.Failable.Supplier;
+import nawaman.nullablej.NullableJ;
 
 
 // TODO - Change this to composite to inherit
@@ -33,7 +33,7 @@ import lombok.experimental.ExtensionMethod;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ UNulls.class, extensions.class })
+@ExtensionMethod({ NullableJ.class, extensions.class })
 public abstract class MethodSupplierFinder implements IFindSupplier {
     
     protected Object[] getMethodParameters(Method method, IProvideObject objectProvider) {

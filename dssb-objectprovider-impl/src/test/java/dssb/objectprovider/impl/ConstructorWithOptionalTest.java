@@ -23,11 +23,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import dssb.objectprovider.impl.annotations.Nullable;
-import dssb.utils.common.UNulls;
 import lombok.experimental.ExtensionMethod;
+import nawaman.nullablej.NullableJ;
 
 @SuppressWarnings("javadoc")
-@ExtensionMethod({ UNulls.class })
+@ExtensionMethod({ NullableJ.class })
 public class ConstructorWithOptionalTest {
     
     private ObjectProvider provider = new ObjectProvider();
@@ -38,14 +38,14 @@ public class ConstructorWithOptionalTest {
         public String name();
     }
     
-    @ExtensionMethod({ UNulls.class })
+    @ExtensionMethod({ NullableJ.class })
     public static class Employee {
         private Department department;
         public Employee(Optional<Department> department) {
             this.department = department.orElse(null);
         }
         public String departmentName() {
-            return department.whenNotNull().map(Department::name).orElse(null);
+            return department._whenNotNull().map(Department::name).orElse(null);
         }
     }
     
@@ -61,8 +61,8 @@ public class ConstructorWithOptionalTest {
             throw new RuntimeException("Too much");
         }
     }
-
-    @ExtensionMethod({ UNulls.class })
+    
+    @ExtensionMethod({ NullableJ.class })
     public static class Manager {
         private Optional<Salary> salary;
         public Manager(Optional<Salary> salary) {
@@ -78,7 +78,7 @@ public class ConstructorWithOptionalTest {
         assertNotNull(provider.get(Manager.class).salary());
     }
     
-    @ExtensionMethod({ UNulls.class })
+    @ExtensionMethod({ NullableJ.class })
     public static class ExecutiveNullable {
         private Salary salary;
         public ExecutiveNullable(@Nullable Salary salary) {
@@ -89,7 +89,7 @@ public class ConstructorWithOptionalTest {
         }
     }
     
-    @ExtensionMethod({ UNulls.class })
+    @ExtensionMethod({ NullableJ.class })
     public static class ExecutiveOptional {
         private Salary salary;
         public ExecutiveOptional(@dssb.objectprovider.impl.annotations.Optional Salary salary) {
@@ -106,7 +106,7 @@ public class ConstructorWithOptionalTest {
         assertNull(provider.get(ExecutiveOptional.class).salary());
     }
     
-    @ExtensionMethod({ UNulls.class })
+    @ExtensionMethod({ NullableJ.class })
     public static class OwnerNullable {
         private Optional<Salary> salary;
         public OwnerNullable(@Nullable Optional<Salary> salary) {
@@ -117,7 +117,7 @@ public class ConstructorWithOptionalTest {
         }
     }
     
-    @ExtensionMethod({ UNulls.class })
+    @ExtensionMethod({ NullableJ.class })
     public static class OwnerOptional {
         private Optional<Salary> salary;
         public OwnerOptional(@dssb.objectprovider.impl.annotations.Optional Optional<Salary> salary) {

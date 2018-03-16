@@ -22,11 +22,11 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Objects;
 import java.util.Optional;
 
-import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
-import dssb.utils.common.UNulls;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
+import nawaman.failable.Failable.Supplier;
+import nawaman.nullablej.NullableJ;
 
 /**
  * This class provides value from the singleton field
@@ -39,7 +39,7 @@ import lombok.experimental.ExtensionMethod;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ UNulls.class, extensions.class })
+@ExtensionMethod({ NullableJ.class, extensions.class })
 public class SingletonFieldFinder implements IFindSupplier {
 
     @SuppressWarnings({ "unchecked" })
@@ -48,7 +48,7 @@ public class SingletonFieldFinder implements IFindSupplier {
             Class<TYPE>    theGivenClass,
             IProvideObject objectProvider) {
         Supplier<TYPE, THROWABLE> fieldValue = findValueFromSingletonField(theGivenClass);
-        if (fieldValue.isNotNull())
+        if (fieldValue._isNotNull())
             return (Supplier<TYPE, THROWABLE>) fieldValue;
         
         return null;

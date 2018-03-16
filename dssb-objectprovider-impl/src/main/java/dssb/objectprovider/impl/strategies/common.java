@@ -15,7 +15,7 @@
 //  ========================================================================
 package dssb.objectprovider.impl.strategies;
 
-import dssb.failable.Failable.Supplier;
+import nawaman.failable.Failable.Supplier;
 
 class common {
 

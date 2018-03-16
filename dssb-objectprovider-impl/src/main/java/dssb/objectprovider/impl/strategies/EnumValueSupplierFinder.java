@@ -17,11 +17,11 @@ package dssb.objectprovider.impl.strategies;
 
 import static java.util.Arrays.stream;
 
-import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.exception.ObjectCreationException;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
+import nawaman.failable.Failable.Supplier;
 
 /**
  * This class return default enum value.

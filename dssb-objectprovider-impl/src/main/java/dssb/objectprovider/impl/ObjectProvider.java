@@ -27,7 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import static java.util.Collections.EMPTY_LIST;
 import static java.util.Collections.unmodifiableList;
 
-import dssb.failable.Failable.Supplier;
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.api.ProvideObjectException;
 import dssb.objectprovider.impl.exception.AbstractClassCreationException;
@@ -41,19 +40,20 @@ import dssb.objectprovider.impl.strategies.IFindSupplier;
 import dssb.objectprovider.impl.strategies.ImplementedBySupplierFinder;
 import dssb.objectprovider.impl.strategies.NullSupplierFinder;
 import dssb.objectprovider.impl.strategies.SingletonFieldFinder;
-import dssb.utils.common.UNulls;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
+import nawaman.failable.Failable.Supplier;
+import nawaman.nullablej.NullableJ;
 
 /**
  * ObjectProvider can provide objects.
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ UNulls.class })
+@ExtensionMethod({ NullableJ.class })
 public class ObjectProvider implements IProvideObject {
     
     // Stepping stone
@@ -120,7 +120,7 @@ public class ObjectProvider implements IProvideObject {
         this.parent                = parent;
         this.finders               = combineFinders(additionalSupplierFinders);
         this.provideFailureHandler = provideFailureHandler;
-        this.binidings             = bingings.or(noBinding);
+        this.binidings             = bingings._or(noBinding);
         
         // Supportive
         this.additionalSupplierFinders = additionalSupplierFinders;
@@ -158,7 +158,7 @@ public class ObjectProvider implements IProvideObject {
     private static List<IFindSupplier> combineFinders(List<IFindSupplier> additionalSupplierFinders) {
         val finderList = new ArrayList<IFindSupplier>();
         finderList.addAll(classLevelfinders);
-        finderList.addAll(additionalSupplierFinders.or(noAdditionalSuppliers));
+        finderList.addAll(additionalSupplierFinders._or(noAdditionalSuppliers));
         finderList.addAll(elementLevelfinders);
         return unmodifiableList(finderList);
     }
@@ -219,9 +219,9 @@ public class ObjectProvider implements IProvideObject {
             Class<TYPE> theGivenClass) {
         
         Supplier supplier = suppliers.get(theGivenClass);
-        if (supplier.isNull()) {
+        if (supplier._isNull()) {
             supplier = newSupplierFor(theGivenClass);
-            supplier = supplier.or(NoSupplier);
+            supplier = supplier._or(NoSupplier);
             suppliers.put(theGivenClass, supplier);
         }
         return supplier;
@@ -230,16 +230,16 @@ public class ObjectProvider implements IProvideObject {
     @SuppressWarnings({ "rawtypes" })
     private <T> Supplier newSupplierFor(Class<T> theGivenClass) {
         val binding = this.binidings.getBinding(theGivenClass);
-        if (binding.isNotNull())
+        if (binding._isNotNull())
             return ()->binding.get(this);
         
         if (ObjectProvider.class.isAssignableFrom(theGivenClass))
             return ()->this;
         
-        val parentProvider = (IProvideObject)this.parent.or(this);
+        val parentProvider = (IProvideObject)this.parent._or(this);
         for (val finder : finders) {
             val supplier = finder.find(theGivenClass, parentProvider);
-            if (supplier.isNotNull())
+            if (supplier._isNotNull())
                 return supplier;
         }
         
@@ -250,7 +250,7 @@ public class ObjectProvider implements IProvideObject {
     }
     
     private <T> Object handleLoateFailure(Class<T> theGivenClass) {
-        if (this.provideFailureHandler.isNotNull()) {
+        if (this.provideFailureHandler._isNotNull()) {
             return callHandler(theGivenClass);
         } else {
             return defaultHandling(theGivenClass);
