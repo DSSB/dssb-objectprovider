@@ -40,7 +40,7 @@ public class ImplementedBySupplierFinder implements IFindSupplier {
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>    theGivenClass,
             IProvideObject objectProvider) {
-        if (theGivenClass.getAnnotations().hasOneOf("ImplementedBy")) {
+        if (theGivenClass.getAnnotations().has("ImplementedBy")) {
             val defaultImplementationClass = findDefaultImplementation(theGivenClass);
             if (defaultImplementationClass._isNotNull()) {
                 return new Supplier() {

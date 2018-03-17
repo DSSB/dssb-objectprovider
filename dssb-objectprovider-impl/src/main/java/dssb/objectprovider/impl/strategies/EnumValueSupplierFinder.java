@@ -52,7 +52,7 @@ public class EnumValueSupplierFinder implements IFindSupplier {
         if (enumConstants._isEmpty())
             return null;
         
-        T   enumConstant
+        T enumConstant
                 = enumConstants
                 ._find(defaultEnumValue(theGivenClass))
                 .orElse(enumConstants[0]);
@@ -64,7 +64,7 @@ public class EnumValueSupplierFinder implements IFindSupplier {
         return value->{
             val name = ((Enum)value).name();
             try {
-                return theGivenClass.getField(name).getAnnotations().hasOneOf("Default");
+                return theGivenClass.getField(name).getAnnotations().has("Default");
             } catch (NoSuchFieldException | SecurityException e) {
                 throw new ObjectCreationException(theGivenClass, e);
             }

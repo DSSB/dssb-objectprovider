@@ -39,7 +39,7 @@ public class NullSupplierFinder implements IFindSupplier {
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>    theGivenClass,
             IProvideObject objectProvider) {
-        return theGivenClass.getAnnotations().hasOneOf(ANNOTATION_NAME)
+        return theGivenClass.getAnnotations().has(ANNOTATION_NAME)
                 ? (Supplier<TYPE, THROWABLE>)NullSupplier
                 : null;
     }

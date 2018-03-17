@@ -38,7 +38,7 @@ public class DefaultInterfaceSupplierFinder implements IFindSupplier {
             IProvideObject objectProvider) {
         boolean isDefaultInterface
                 =  theGivenClass.isInterface()
-                && theGivenClass.getAnnotations().hasOneOf("DefaultInterface");
+                && theGivenClass.getAnnotations().has("DefaultInterface");
         // TODO Implement this.
         return isDefaultInterface
                 ? NullSupplier

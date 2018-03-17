@@ -51,8 +51,8 @@ public abstract class MethodSupplierFinder implements IFindSupplier {
             val param             = paramsArray[i];
             val paramType         = param.getType();
             val parameterizedType = param.getParameterizedType();
-            boolean isNullable    = param.getAnnotations().hasOneOf("Nullable")
-                                 || param.getAnnotations().hasOneOf("Optional");
+            boolean isNullable    = param.getAnnotations().has("Nullable")
+                                 || param.getAnnotations().has("Optional");
             Object  paramValue    = determineParameterValue(paramType, parameterizedType, isNullable, objectProvider);
             params[i] = paramValue;
         }

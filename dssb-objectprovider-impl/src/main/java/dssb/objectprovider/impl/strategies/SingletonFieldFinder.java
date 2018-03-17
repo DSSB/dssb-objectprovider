@@ -61,7 +61,7 @@ public class SingletonFieldFinder implements IFindSupplier {
         return (Supplier)stream(theGivenClass.getDeclaredFields())
                 .filter(field->Modifier.isStatic(field.getModifiers()))
                 .filter(field->Modifier.isPublic(field.getModifiers()))
-                .filter(field->AnnotationUtils.hasOneOf(field.getAnnotations(), "Default"))
+                .filter(field->AnnotationUtils.has(field.getAnnotations(), "Default"))
                 .map(field->{
                     val type = field.getType();
                     if (theGivenClass.isAssignableFrom(type))

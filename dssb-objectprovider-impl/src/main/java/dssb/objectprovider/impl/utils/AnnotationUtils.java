@@ -36,7 +36,7 @@ public class AnnotationUtils {
      * @param names        the names expected.
      * @return  {@code true}  if the annotations has at lease one of the names.
      */
-    public static boolean hasOneOf(Annotation[] annotations, String ... names) {
+    public static boolean has(Annotation[] annotations, String ... names) {
         return names._stream$().anyMatch(
                 name -> annotations._hasSome(withNamed(name)));
     }

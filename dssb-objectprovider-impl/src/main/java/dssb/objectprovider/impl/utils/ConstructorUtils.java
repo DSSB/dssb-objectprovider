@@ -79,7 +79,7 @@ public class ConstructorUtils {
             if (!Modifier.isPublic(constructor.getModifiers()))
                 continue;
             
-            if (constructor.getAnnotations().hasOneOf(annotationNames))
+            if (constructor.getAnnotations().has(annotationNames))
                 return (Constructor<T>)constructor;
         }
         return null;
