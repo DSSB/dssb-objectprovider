@@ -30,8 +30,7 @@ import nawaman.nullablej.NullableJ;
  */
 @ExtensionMethod({
     NullableJ.class,
-    AnnotationUtils.class,
-    ConstructorUtils.class
+    AnnotationUtils.class
 })
 public class ConstructorUtils {
     
@@ -61,9 +60,9 @@ public class ConstructorUtils {
      */
     public static <T> Supplier<Constructor<T>> sensibleDefaultConstructorOf(Class<T> clzz) {
         return ()->
-                clzz.hasOnlyOneConsructor()
-                ? clzz.getOnlyConstructor()
-                : clzz.getNoArgConstructor();
+                hasOnlyOneConsructor(clzz)
+                ? getOnlyConstructor(clzz)
+                : getNoArgConstructor(clzz);
     }
     
     /**

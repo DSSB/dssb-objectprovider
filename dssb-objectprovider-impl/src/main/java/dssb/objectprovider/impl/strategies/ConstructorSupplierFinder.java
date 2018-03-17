@@ -47,7 +47,7 @@ public class ConstructorSupplierFinder extends MethodSupplierFinder implements I
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE>
             find(Class<TYPE> theGivenClass, IProvideObject objectProvider) {
-        val constructor
+        Constructor<TYPE> constructor
                 = theGivenClass.findConstructorWithAnnotation(INJECT)
                 ._orGet(sensibleDefaultConstructorOf(theGivenClass));
         
