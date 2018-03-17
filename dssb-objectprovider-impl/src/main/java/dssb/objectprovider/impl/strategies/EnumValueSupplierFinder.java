@@ -15,7 +15,7 @@
 //  ========================================================================
 package dssb.objectprovider.impl.strategies;
 
-import static java.util.Arrays.stream;
+import java.util.function.Predicate;
 
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.exception.ObjectCreationException;
@@ -23,15 +23,19 @@ import dssb.objectprovider.impl.utils.AnnotationUtils;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
+import nawaman.nullablej.NullableJ;
 
 /**
  * This class return default enum value.
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ AnnotationUtils.class })
+@ExtensionMethod({
+    NullableJ.class,
+    AnnotationUtils.class
+})
 public class EnumValueSupplierFinder implements IFindSupplier {
-
+    
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>    theGivenClass,
@@ -45,22 +49,26 @@ public class EnumValueSupplierFinder implements IFindSupplier {
     
     private static <T> T findDefaultEnumValue(Class<T> theGivenClass) {
         T[] enumConstants = theGivenClass.getEnumConstants();
-        if (enumConstants.length == 0)
+        if (enumConstants._isEmpty())
             return null;
-        return stream(enumConstants)
-                .filter(value->checkDefaultEnumValue(theGivenClass, value))
-                .findAny()
+        
+        T   enumConstant
+                = enumConstants
+                ._find(defaultEnumValue(theGivenClass))
                 .orElse(enumConstants[0]);
+        return enumConstant;
     }
     
     @SuppressWarnings("rawtypes")
-    private static <T> boolean checkDefaultEnumValue(Class<T> theGivenClass, T value) {
-        val name = ((Enum)value).name();
-        try {
-            return theGivenClass.getField(name).getAnnotations().hasOneOf("Default");
-        } catch (NoSuchFieldException | SecurityException e) {
-            throw new ObjectCreationException(theGivenClass, e);
-        }
+    static <T> Predicate<T>defaultEnumValue(Class<T> theGivenClass) {
+        return value->{
+            val name = ((Enum)value).name();
+            try {
+                return theGivenClass.getField(name).getAnnotations().hasOneOf("Default");
+            } catch (NoSuchFieldException | SecurityException e) {
+                throw new ObjectCreationException(theGivenClass, e);
+            }
+        };
     }
     
 }

@@ -46,4 +46,11 @@ public class DefaultEnumTest {
         assertEquals(MyEnum2.Value2, provider.get(MyEnum2.class));
     }
     
+    public static enum EmptyEnum { }
+    
+    @Test
+    public void testThat_emptyEnumValue_isnull() {
+        assertEquals(null, provider.get(EmptyEnum.class));
+    }
+    
 }
