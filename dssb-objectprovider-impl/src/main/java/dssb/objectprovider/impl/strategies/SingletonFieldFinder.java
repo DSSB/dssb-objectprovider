@@ -61,10 +61,7 @@ public class SingletonFieldFinder implements IFindSupplier {
             Class<TYPE>    theGivenClass,
             IProvideObject objectProvider) {
         Supplier<TYPE, THROWABLE> fieldValue = findValueFromSingletonField(theGivenClass);
-        if (fieldValue._isNotNull())
-            return (Supplier<TYPE, THROWABLE>) fieldValue;
-        
-        return null;
+        return fieldValue;
     }
     
     @SuppressWarnings("rawtypes")
