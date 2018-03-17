@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.util.Collections.EMPTY_LIST;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 
 import dssb.objectprovider.api.IProvideObject;
@@ -61,7 +61,6 @@ public class ObjectProvider implements IProvideObject {
     
     // TODO - Add default factory.
     // TODO - Should create interface with all default method.
-    // TODO - Should check for @NotNull
     
     @SuppressWarnings("rawtypes")
     private static final Supplier NoSupplier = ()->null;
@@ -80,10 +79,10 @@ public class ObjectProvider implements IProvideObject {
     );
     
     @SuppressWarnings("rawtypes")
-    private static final ThreadLocal<Set<Class>> beingCreateds = ThreadLocal.withInitial(()->new HashSet<>());
+    private static final ThreadLocal<Set<Class>> beingCreateds
+            = ThreadLocal.withInitial(()->new HashSet<>());
     
-    @SuppressWarnings("unchecked")
-    private static final List<IFindSupplier> noAdditionalSuppliers = (List<IFindSupplier>)EMPTY_LIST;
+    private static final List<IFindSupplier> noAdditionalSuppliers = emptyList();
     
     private static final Bindings noBinding = new Bindings.Builder().build();
     

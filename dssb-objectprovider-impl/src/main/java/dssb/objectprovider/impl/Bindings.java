@@ -15,9 +15,10 @@
 //  ========================================================================
 package dssb.objectprovider.impl;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import static java.util.Collections.unmodifiableMap;
 
 import lombok.NonNull;
 import lombok.experimental.ExtensionMethod;
@@ -35,7 +36,7 @@ public class Bindings {
     private final Map<Class, IBind> bindings;
     
     Bindings(@SuppressWarnings("rawtypes") Map<Class, IBind> bindings) {
-        this.bindings = Collections.unmodifiableMap(new HashMap<>(bindings));
+        this.bindings = unmodifiableMap(new HashMap<>(bindings));
     }
     
     /**
