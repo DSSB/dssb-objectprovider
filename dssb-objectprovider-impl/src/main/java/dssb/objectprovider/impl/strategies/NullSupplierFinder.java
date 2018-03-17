@@ -19,6 +19,7 @@ import static dssb.objectprovider.impl.strategies.common.NullSupplier;
 
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.annotations.DefaultToNull;
+import dssb.objectprovider.impl.utils.AnnotationUtils;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
 
@@ -27,7 +28,7 @@ import nawaman.failable.Failable.Supplier;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ extensions.class })
+@ExtensionMethod({ AnnotationUtils.class })
 public class NullSupplierFinder implements IFindSupplier {
     
     /** The name of the DefaultToNull annotation */
@@ -38,7 +39,7 @@ public class NullSupplierFinder implements IFindSupplier {
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>    theGivenClass,
             IProvideObject objectProvider) {
-        return theGivenClass.getAnnotations().hasAnnotation(ANNOTATION_NAME)
+        return theGivenClass.getAnnotations().hasOneOf(ANNOTATION_NAME)
                 ? (Supplier<TYPE, THROWABLE>)NullSupplier
                 : null;
     }

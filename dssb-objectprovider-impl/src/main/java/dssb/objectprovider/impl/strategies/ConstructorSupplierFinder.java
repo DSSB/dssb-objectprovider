@@ -17,14 +17,15 @@ package dssb.objectprovider.impl.strategies;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.annotations.Inject;
-import dssb.objectprovider.impl.exception.ObjectCreationException;
+import dssb.objectprovider.impl.utils.AnnotationUtils;
+import dssb.objectprovider.impl.utils.ConstructorUtils;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
+import nawaman.failable.Failables;
 import nawaman.nullablej.NullableJ;
 
 /**
@@ -32,126 +33,60 @@ import nawaman.nullablej.NullableJ;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ NullableJ.class, extensions.class })
+@ExtensionMethod({
+    NullableJ.class,
+    ConstructorUtils.class,
+    AnnotationUtils.class
+})
 public class ConstructorSupplierFinder extends MethodSupplierFinder implements IFindSupplier {
     
     /** The name of the Inject annotation */
     public static final String INJECT = Inject.class.getSimpleName();
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    
     @Override
-    public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
-            Class<TYPE>    theGivenClass,
-            IProvideObject objectProvider) {
+    public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE>
+            find(
+                Class<TYPE>    theGivenClass,
+                IProvideObject objectProvider) {
         val constructor = findConstructor(theGivenClass);
-        if (constructor._isNotNull()) {
-            val supplier = new Supplier() {
-                public Object get() throws Throwable {
-                    return callConstructor(theGivenClass, constructor, objectProvider);
-                }
-            };
-            return (Supplier<TYPE, THROWABLE>) supplier;
-        }
+        if (constructor._isNull())
+            return null;
+        
+        @SuppressWarnings({"unchecked"})
+        val supplier = (Supplier<TYPE, THROWABLE>) Failables.of(()->{
+            val value = callConstructor(constructor, objectProvider);
+            return value;
+        });
+        return supplier;
+    }
+    
+    private <T> Constructor<T> findConstructor(Class<T> clzz) {
+        Constructor<T> foundConstructor
+                = clzz.findConstructorWithAnnotation(INJECT)
+                ._orGet(sensibleDefaultConstructorOf(clzz));
+        
+        if(foundConstructor._isPublic())
+            return foundConstructor;
+        
         return null;
     }
     
-    @SuppressWarnings({ "rawtypes" })
-    private <T> Constructor findConstructor(Class<T> clzz) {
-        Constructor foundConstructor = findConstructorWithInject(clzz);
-        if (foundConstructor._isNull()) {
-            foundConstructor = hasOnlyOneConsructor(clzz)
-                    ? getOnlyConstructor(clzz)
-                    : getNoArgConstructor(clzz);
-        }
-        
-        if (foundConstructor._isNull()
-         || !Modifier.isPublic(foundConstructor.getModifiers()))
-            return null;
-        
-        return foundConstructor;
+    @SuppressWarnings("unused")
+    private <T> java.util.function.Supplier<Constructor<T>>
+            sensibleDefaultConstructorOf(Class<T> clzz) {
+        return ()->
+                clzz.hasOnlyOneConsructor()
+                ? clzz.getOnlyConstructor()
+                : clzz.getNoArgConstructor();
     }
     
-    @SuppressWarnings("rawtypes")
-    private <T> Object callConstructor(Class<T> theGivenClass, Constructor constructor, IProvideObject objectProvider)
+    private <T> Object callConstructor(Constructor<T> constructor, IProvideObject objectProvider)
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
-        val params   = getParameters(constructor, objectProvider);
-        val instance = constructor.newInstance(params);
-        // TODO - Change to use method handle later.
-        return theGivenClass.cast(instance);
-    }
-    
-    @SuppressWarnings({ "rawtypes" })
-    private Object[] getParameters(Constructor constructor, IProvideObject objectProvider) {
+        // TODO - Change to use method handle.
         val paramsArray = constructor.getParameters();
-        val params = new Object[paramsArray.length];
-        for (int i = 0; i < paramsArray.length; i++) {
-            val param             = paramsArray[i];
-            val paramType         = param.getType();
-            val parameterizedType = param.getParameterizedType();
-            boolean isNullable    = param.getAnnotations().hasAnnotation("Nullable")
-                                 || param.getAnnotations().hasAnnotation("Optional");
-            Object paramValue     = getParameterValue(paramType, parameterizedType, isNullable, objectProvider);
-            params[i] = paramValue;
-        }
-        return params;
-    }
-    
-    /**
-     * Check if there is only one constructor.
-     * 
-     * @param <T>   the data type that the class represent.
-     * @param clzz  the data class.
-     * @return  {@code true} if there is only one consturctor.
-     */
-    public static <T> boolean hasOnlyOneConsructor(final Class<T> clzz) {
-        return clzz.getConstructors().length == 1;
-    }
-    
-    /**
-     * Find a constructor with Inject annotation.
-     * 
-     * @param <T>   the data type the given class represent.
-     * @param clzz  the data class.
-     * @return  the constructor found.
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> Constructor<T> findConstructorWithInject(Class<T> clzz) {
-        for(Constructor<?> constructor : clzz.getConstructors()) {
-            if (!Modifier.isPublic(constructor.getModifiers()))
-                continue;
-            
-            if (extensions.hasAnnotation(constructor.getAnnotations(), INJECT))
-                return (Constructor<T>)constructor;
-        }
-        return null;
-    }
-    
-    /**
-     * Find the constructor with no arguments.
-     * 
-     * @param <T>   the dada type that the clzz represents..
-     * @param clzz  the data class.
-     * @return  the constructor.
-     */
-    public static <T> Constructor<T> getNoArgConstructor(Class<T> clzz) {
-        try {
-            return clzz.getDeclaredConstructor();
-        } catch (NoSuchMethodException e) {
-            return null;
-        } catch (SecurityException e) {
-            throw new ObjectCreationException(clzz);
-        }
-    }
-    
-    /**
-     * Find the only constructor of the given class.
-     * 
-     * @param <T>   the data type that the clzz represent.
-     * @param clzz  the clzz.
-     * @return  the  constructor found.
-     */
-    public static <T> Constructor<?> getOnlyConstructor(Class<T> clzz) {
-        return clzz.getConstructors()[0];
+        val paramValues = getParameters(paramsArray, objectProvider);
+        val instance    = constructor.newInstance(paramValues);
+        return (T)instance;
     }
     
 }

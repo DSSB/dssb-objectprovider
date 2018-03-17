@@ -16,11 +16,13 @@
 package dssb.objectprovider.impl.strategies;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
 
 import dssb.objectprovider.api.IProvideObject;
+import dssb.objectprovider.impl.utils.AnnotationUtils;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
@@ -34,26 +36,31 @@ import nawaman.nullablej.nullable.Nullable;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ NullableJ.class, extensions.class })
+@ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
 public abstract class MethodSupplierFinder implements IFindSupplier {
-    
+
     protected Object[] getMethodParameters(Method method, IProvideObject objectProvider) {
         val paramsArray = method.getParameters();
+        val paramValues = getParameters(paramsArray , objectProvider);
+        return paramValues;
+    }
+    
+    protected Object[] getParameters(Parameter[] paramsArray, IProvideObject objectProvider) {
         val params = new Object[paramsArray.length];
         for (int i = 0; i < paramsArray.length; i++) {
             val param             = paramsArray[i];
             val paramType         = param.getType();
             val parameterizedType = param.getParameterizedType();
-            boolean isNullable    = param.getAnnotations().hasAnnotation("Nullable")
-                                 || param.getAnnotations().hasAnnotation("Optional");
-            Object  paramValue    = getParameterValue(paramType, parameterizedType, isNullable, objectProvider);
+            boolean isNullable    = param.getAnnotations().hasOneOf("Nullable")
+                                 || param.getAnnotations().hasOneOf("Optional");
+            Object  paramValue    = determineParameterValue(paramType, parameterizedType, isNullable, objectProvider);
             params[i] = paramValue;
         }
         return params;
     }
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected Object getParameterValue(Class paramType, Type type, boolean isNullable, IProvideObject objectProvider) {
+    protected Object determineParameterValue(Class paramType, Type type, boolean isNullable, IProvideObject objectProvider) {
         if (type instanceof ParameterizedType) {
             val parameterizedType = (ParameterizedType)type;
             val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];

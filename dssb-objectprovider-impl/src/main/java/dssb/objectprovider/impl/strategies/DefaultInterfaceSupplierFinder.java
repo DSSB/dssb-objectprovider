@@ -18,6 +18,7 @@ package dssb.objectprovider.impl.strategies;
 import static dssb.objectprovider.impl.strategies.common.NullSupplier;
 
 import dssb.objectprovider.api.IProvideObject;
+import dssb.objectprovider.impl.utils.AnnotationUtils;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
 import nawaman.nullablej.NullableJ;
@@ -27,7 +28,7 @@ import nawaman.nullablej.NullableJ;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ NullableJ.class, extensions.class })
+@ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
 public class DefaultInterfaceSupplierFinder implements IFindSupplier {
 
     @SuppressWarnings("unchecked")
@@ -37,7 +38,7 @@ public class DefaultInterfaceSupplierFinder implements IFindSupplier {
             IProvideObject objectProvider) {
         boolean isDefaultInterface
                 =  theGivenClass.isInterface()
-                && theGivenClass.getAnnotations().hasAnnotation("DefaultInterface");
+                && theGivenClass.getAnnotations().hasOneOf("DefaultInterface");
         // TODO Implement this.
         return isDefaultInterface
                 ? NullSupplier

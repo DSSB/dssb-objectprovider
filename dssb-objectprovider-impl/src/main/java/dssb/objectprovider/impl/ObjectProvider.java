@@ -245,10 +245,10 @@ public class ObjectProvider implements IProvideObject {
         if (IProvideObject.class.isAssignableFrom(theGivenClass))
             return ()->this;
         
-        return ()->handleLoateFailure(theGivenClass);
+        return ()->handleLoadingFailure(theGivenClass);
     }
     
-    private <T> Object handleLoateFailure(Class<T> theGivenClass) {
+    private <T> Object handleLoadingFailure(Class<T> theGivenClass) {
         if (this.provideFailureHandler._isNotNull()) {
             return callHandler(theGivenClass);
         } else {

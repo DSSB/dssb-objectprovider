@@ -19,6 +19,7 @@ import static java.util.Arrays.stream;
 
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.exception.ObjectCreationException;
+import dssb.objectprovider.impl.utils.AnnotationUtils;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
@@ -28,7 +29,7 @@ import nawaman.failable.Failable.Supplier;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ extensions.class })
+@ExtensionMethod({ AnnotationUtils.class })
 public class EnumValueSupplierFinder implements IFindSupplier {
 
     @Override
@@ -56,7 +57,7 @@ public class EnumValueSupplierFinder implements IFindSupplier {
     private static <T> boolean checkDefaultEnumValue(Class<T> theGivenClass, T value) {
         val name = ((Enum)value).name();
         try {
-            return theGivenClass.getField(name).getAnnotations().hasAnnotation("Default");
+            return theGivenClass.getField(name).getAnnotations().hasOneOf("Default");
         } catch (NoSuchFieldException | SecurityException e) {
             throw new ObjectCreationException(theGivenClass, e);
         }

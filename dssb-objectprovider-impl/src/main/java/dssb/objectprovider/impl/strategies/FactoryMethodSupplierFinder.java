@@ -24,6 +24,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Optional;
 
 import dssb.objectprovider.api.IProvideObject;
+import dssb.objectprovider.impl.utils.AnnotationUtils;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
@@ -35,7 +36,7 @@ import nawaman.nullablej.nullable.Nullable;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ NullableJ.class, extensions.class })
+@ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
 public class FactoryMethodSupplierFinder extends MethodSupplierFinder implements IFindSupplier {
 
     @SuppressWarnings({ "unchecked" })
@@ -55,7 +56,7 @@ public class FactoryMethodSupplierFinder extends MethodSupplierFinder implements
         return (Supplier<T, ? extends Throwable>)stream(theGivenClass.getDeclaredMethods())
                 .filter(method->Modifier.isStatic(method.getModifiers()))
                 .filter(method->Modifier.isPublic(method.getModifiers()))
-                .filter(method->extensions.hasAnnotation(method.getAnnotations(), "Default"))
+                .filter(method->AnnotationUtils.hasOneOf(method.getAnnotations(), "Default"))
                 .map(method->FactoryMethodSupplierFinder.this.getFactoryMethodValue(theGivenClass, method, objectProvider))
                 .findAny()
                 .orElse(null);

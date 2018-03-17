@@ -21,6 +21,7 @@ import static java.util.Arrays.stream;
 import java.util.Objects;
 
 import dssb.objectprovider.api.IProvideObject;
+import dssb.objectprovider.impl.utils.AnnotationUtils;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
@@ -31,7 +32,7 @@ import nawaman.nullablej.NullableJ;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ NullableJ.class, extensions.class })
+@ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
 public class ImplementedBySupplierFinder implements IFindSupplier {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -39,7 +40,7 @@ public class ImplementedBySupplierFinder implements IFindSupplier {
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>    theGivenClass,
             IProvideObject objectProvider) {
-        if (theGivenClass.getAnnotations().hasAnnotation("ImplementedBy")) {
+        if (theGivenClass.getAnnotations().hasOneOf("ImplementedBy")) {
             val defaultImplementationClass = findDefaultImplementation(theGivenClass);
             if (defaultImplementationClass._isNotNull()) {
                 return new Supplier() {

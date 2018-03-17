@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import dssb.objectprovider.api.IProvideObject;
+import dssb.objectprovider.impl.utils.AnnotationUtils;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
@@ -40,7 +41,7 @@ import nawaman.nullablej.nullable.Nullable;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ NullableJ.class, extensions.class })
+@ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
 public class SingletonFieldFinder implements IFindSupplier {
 
     @SuppressWarnings({ "unchecked" })
@@ -60,7 +61,7 @@ public class SingletonFieldFinder implements IFindSupplier {
         return (Supplier)stream(theGivenClass.getDeclaredFields())
                 .filter(field->Modifier.isStatic(field.getModifiers()))
                 .filter(field->Modifier.isPublic(field.getModifiers()))
-                .filter(field->extensions.hasAnnotation(field.getAnnotations(), "Default"))
+                .filter(field->AnnotationUtils.hasOneOf(field.getAnnotations(), "Default"))
                 .map(field->{
                     val type = field.getType();
                     if (theGivenClass.isAssignableFrom(type))
