@@ -62,7 +62,7 @@ public class ImplementedBySupplierFinder implements IFindSupplier {
     
     @SuppressWarnings("unchecked")
     private static <T> Class<T> findDefaultImplementation(Class<T> theGivenClass) {
-        val implementedClass
+        Class<?> implementedClass
                 = theGivenClass.getAnnotations()._stream$()
                 .map(toString)
                 .map(extractValue)
