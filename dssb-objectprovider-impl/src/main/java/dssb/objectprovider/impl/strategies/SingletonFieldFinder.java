@@ -15,15 +15,20 @@
 //  ========================================================================
 package dssb.objectprovider.impl.strategies;
 
+import static dssb.objectprovider.impl.utils.FieldUtils.annotatedWith;
+import static dssb.objectprovider.impl.utils.FieldUtils.ifPublicField;
+import static dssb.objectprovider.impl.utils.FieldUtils.ifStaticField;
 import static java.util.Arrays.stream;
 
-import java.lang.reflect.Modifier;
+import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.utils.AnnotationUtils;
+import lombok.Value;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
@@ -41,8 +46,14 @@ import nawaman.nullablej.nullable.Nullable;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
+@ExtensionMethod({
+    NullableJ.class,
+    AnnotationUtils.class
+})
 public class SingletonFieldFinder implements IFindSupplier {
+    
+    private static final Predicate<Field>  annotatedWithDefault = annotatedWith("Default");
+    private static final Predicate<Object> notNull              = Objects::nonNull;
 
     @SuppressWarnings({ "unchecked" })
     @Override
@@ -56,45 +67,85 @@ public class SingletonFieldFinder implements IFindSupplier {
         return null;
     }
     
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings("rawtypes")
     private static <T> Supplier findValueFromSingletonField(Class<T> theGivenClass) {
+        val helper = new Helper<T>(theGivenClass);
         return (Supplier)stream(theGivenClass.getDeclaredFields())
-                .filter(field->Modifier.isStatic(field.getModifiers()))
-                .filter(field->Modifier.isPublic(field.getModifiers()))
-                .filter(field->AnnotationUtils.has(field.getAnnotations(), "Default"))
-                .map(field->{
-                    val type = field.getType();
-                    if (theGivenClass.isAssignableFrom(type))
-                        return (Supplier)(()->field.get(theGivenClass));
-                    
-                    if (Optional.class.isAssignableFrom(type)) {
-                        val parameterizedType = (ParameterizedType)field.getGenericType();
-                        val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
-                        
-                        if (theGivenClass.isAssignableFrom(actualType))
-                            return (Supplier)(()->((Optional)field.get(theGivenClass)).orElse(null));
-                    }
-                    if (Nullable.class.isAssignableFrom(type)) {
-                        val parameterizedType = (ParameterizedType)field.getGenericType();
-                        val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
-                        
-                        if (theGivenClass.isAssignableFrom(actualType))
-                            return (Supplier)(()->((Nullable)field.get(theGivenClass)).orElse(null));
-                    }
-                    
-                    if (java.util.function.Supplier.class.isAssignableFrom(type)) {
-                        val parameterizedType = (ParameterizedType)field.getGenericType();
-                        val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
-                        
-                        if (theGivenClass.isAssignableFrom(actualType))
-                            return (Supplier)()->((java.util.function.Supplier)field.get(theGivenClass)).get();
-                    }
-                    
-                    return null;
-                })
-                .filter(Objects::nonNull)
+                .filter(ifPublicField)
+                .filter(ifStaticField)
+                .filter(annotatedWithDefault)
+                .map(helper::findValue)
+                .filter(notNull)
                 .findAny()
                 .orElse(null);
+    }
+    
+    @Value
+    static class Helper<T> {
+        private Class<T> theGivenClass;
+        
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        Supplier findValue(Field field) {
+            val type = field.getType();
+            if (theGivenClass.isAssignableFrom(type))
+                return (Supplier)(()->getFieldValue(field));
+            
+            val optionalSupplier = findOptionalOrNullableFieldValue(field, type);
+            if (optionalSupplier._isNotNull())
+                return optionalSupplier;
+            
+            val supplierSupplier = findSupplierFieldValue(field, type);
+            if (supplierSupplier._isNotNull())
+                return supplierSupplier;
+            
+            return null;
+        }
+        
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        private Supplier findSupplierFieldValue(Field field, final java.lang.Class<?> type) {
+            if (!java.util.function.Supplier.class.isAssignableFrom(type))
+                return null;
+            
+            val parameterizedType = (ParameterizedType)field.getGenericType();
+            val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
+            
+            if (!theGivenClass.isAssignableFrom(actualType))
+                return null;
+            
+            val supplier = (Supplier)()->{ 
+                val value = ((java.util.function.Supplier)getFieldValue(field)).get();
+                return value;
+            };
+            return supplier;
+        }
+        
+        private Object getFieldValue(Field field) throws IllegalAccessException {
+            return field.get(theGivenClass);
+        }
+        
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        private Supplier findOptionalOrNullableFieldValue(Field field, final java.lang.Class<?> type) {
+            boolean isOptional = Optional.class.isAssignableFrom(type);
+            boolean isNullable = !isOptional && Nullable.class.isAssignableFrom(type);
+            if (!isOptional && !isNullable)
+                return null;
+            
+            val parameterizedType = (ParameterizedType)field.getGenericType();
+            val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
+            
+            if (!theGivenClass.isAssignableFrom(actualType))
+                return null;
+            
+            val supplier = (Supplier)(()-> {
+                val optional = getFieldValue(field);
+                val value
+                        = isOptional
+                        ? ((Optional)optional).orElse(null)
+                        : ((Nullable)optional).orElse(null);
+                return value;
+            });
+            return supplier;
+        }
     }
     
 }

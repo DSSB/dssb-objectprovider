@@ -17,7 +17,7 @@ package dssb.objectprovider.impl.utils;
 
 import static dssb.objectprovider.impl.utils.AnnotationUtils.has;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
 
@@ -25,7 +25,7 @@ import lombok.experimental.ExtensionMethod;
 import nawaman.nullablej.NullableJ;
 
 /**
- * Utility involving methods
+ * Utility involving fields.
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
@@ -33,48 +33,48 @@ import nawaman.nullablej.NullableJ;
     NullableJ.class,
     AnnotationUtils.class
 })
-public class MethodUtils {
+public class FieldUtils {
     
-    /** The predicate to check if a method is public. */
-    public static Predicate<Method> ifPublicMethod = method -> _isPublic(method);
+    /** The predicate to check if a field is public. */
+    public static Predicate<Field> ifPublicField = field -> _isPublic(field);
     
-    /** The predicate to check if a method is static. */
-    public static Predicate<Method> ifStaticMethod = method -> _isStatic(method);
+    /** The predicate to check if a field is static. */
+    public static Predicate<Field> ifStaticField = field -> _isStatic(field);
     
     /**
-     * Checks if the method is public (null-safe).
+     * Checks if the field is public (null-safe).
      * 
-     * @param method  the method.
-     * @return {@code true} if the method is public.
+     * @param field  the field.
+     * @return {@code true} if the field is public.
      */
-    public static boolean _isPublic(Method method) {
-        if (method._isNull())
+    public static boolean _isPublic(Field field) {
+        if (field._isNull())
             return false;
         
-        return Modifier.isPublic(method.getModifiers());
+        return Modifier.isPublic(field.getModifiers());
     }
     
     /**
-     * Checks if the method is static (null-safe).
+     * Checks if the field is static (null-safe).
      * 
-     * @param method  the method.
-     * @return {@code true} if the method is static.
+     * @param field  the field.
+     * @return {@code true} if the field is static.
      */
-    public static boolean _isStatic(Method method) {
-        if (method._isNull())
+    public static boolean _isStatic(Field field) {
+        if (field._isNull())
             return false;
         
-        return Modifier.isStatic(method.getModifiers());
+        return Modifier.isStatic(field.getModifiers());
     }
     
     /**
-     * Returns the predicate that check if the method has and annotation with the given names.
+     * Returns the predicate that check if the field has and annotation with the given names.
      * 
      * @param names  the annotation names.
      * @return  the predicate.
      */
-    public static Predicate<Method> annotatedWith(String ... names) {
-        return method->has(method.getAnnotations(), names);
+    public static Predicate<Field> annotatedWith(String ... names) {
+        return field->has(field.getAnnotations(), names);
     }
     
 }
