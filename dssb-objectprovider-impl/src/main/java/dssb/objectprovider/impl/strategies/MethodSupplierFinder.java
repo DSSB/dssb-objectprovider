@@ -39,13 +39,13 @@ import nawaman.nullablej.nullable.Nullable;
 @ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
 public abstract class MethodSupplierFinder implements IFindSupplier {
 
-    protected Object[] getMethodParameters(Method method, IProvideObject objectProvider) {
+    protected static Object[] getMethodParameters(Method method, IProvideObject objectProvider) {
         val paramsArray = method.getParameters();
         val paramValues = getParameters(paramsArray , objectProvider);
         return paramValues;
     }
     
-    protected Object[] getParameters(Parameter[] paramsArray, IProvideObject objectProvider) {
+    protected static Object[] getParameters(Parameter[] paramsArray, IProvideObject objectProvider) {
         val params = new Object[paramsArray.length];
         for (int i = 0; i < paramsArray.length; i++) {
             val param             = paramsArray[i];
@@ -60,7 +60,7 @@ public abstract class MethodSupplierFinder implements IFindSupplier {
     }
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected Object determineParameterValue(Class paramType, Type type, boolean isNullable, IProvideObject objectProvider) {
+    protected static Object determineParameterValue(Class paramType, Type type, boolean isNullable, IProvideObject objectProvider) {
         if (type instanceof ParameterizedType) {
             val parameterizedType = (ParameterizedType)type;
             val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
@@ -95,7 +95,7 @@ public abstract class MethodSupplierFinder implements IFindSupplier {
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected Object getOptionalValueOrNullWhenFailAndNullable(boolean isNullable, Class actualType, IProvideObject objectProvider) {
+    protected static Object getOptionalValueOrNullWhenFailAndNullable(boolean isNullable, Class actualType, IProvideObject objectProvider) {
         try {
             val paramValue = objectProvider.get(actualType);
             return Optional.ofNullable(paramValue);
@@ -105,7 +105,7 @@ public abstract class MethodSupplierFinder implements IFindSupplier {
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected Object getNullableValueOrNullWhenFailAndNullable(boolean isNullable, Class actualType, IProvideObject objectProvider) {
+    protected static Object getNullableValueOrNullWhenFailAndNullable(boolean isNullable, Class actualType, IProvideObject objectProvider) {
         try {
             val paramValue = objectProvider.get(actualType);
             return Nullable.of(paramValue);
@@ -115,7 +115,7 @@ public abstract class MethodSupplierFinder implements IFindSupplier {
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected Object getValueOrNullWhenFail(Class paramType, IProvideObject objectProvider) {
+    protected static Object getValueOrNullWhenFail(Class paramType, IProvideObject objectProvider) {
         try {
             return objectProvider.get(paramType);
         } catch (Exception e) {

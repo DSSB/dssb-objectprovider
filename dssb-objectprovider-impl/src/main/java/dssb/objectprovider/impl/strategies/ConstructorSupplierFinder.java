@@ -15,8 +15,9 @@
 //  ========================================================================
 package dssb.objectprovider.impl.strategies;
 
+import static dssb.objectprovider.impl.utils.ConstructorUtils.sensibleDefaultConstructorOf;
+
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.annotations.Inject;
@@ -45,48 +46,27 @@ public class ConstructorSupplierFinder extends MethodSupplierFinder implements I
     
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE>
-            find(
-                Class<TYPE>    theGivenClass,
-                IProvideObject objectProvider) {
-        val constructor = findConstructor(theGivenClass);
-        if (constructor._isNull())
+            find(Class<TYPE> theGivenClass, IProvideObject objectProvider) {
+        val constructor
+                = theGivenClass.findConstructorWithAnnotation(INJECT)
+                ._orGet(sensibleDefaultConstructorOf(theGivenClass));
+        
+        if (!constructor._isPublic())
             return null;
         
-        @SuppressWarnings({"unchecked"})
-        val supplier = (Supplier<TYPE, THROWABLE>) Failables.of(()->{
-            val value = callConstructor(constructor, objectProvider);
-            return value;
-        });
+        @SuppressWarnings("unchecked")
+        val supplier = (Supplier<TYPE, THROWABLE>)Failables.of(()->
+                callConstructor(constructor, objectProvider));
         return supplier;
     }
     
-    private <T> Constructor<T> findConstructor(Class<T> clzz) {
-        Constructor<T> foundConstructor
-                = clzz.findConstructorWithAnnotation(INJECT)
-                ._orGet(sensibleDefaultConstructorOf(clzz));
-        
-        if(foundConstructor._isPublic())
-            return foundConstructor;
-        
-        return null;
-    }
-    
-    @SuppressWarnings("unused")
-    private <T> java.util.function.Supplier<Constructor<T>>
-            sensibleDefaultConstructorOf(Class<T> clzz) {
-        return ()->
-                clzz.hasOnlyOneConsructor()
-                ? clzz.getOnlyConstructor()
-                : clzz.getNoArgConstructor();
-    }
-    
-    private <T> Object callConstructor(Constructor<T> constructor, IProvideObject objectProvider)
-            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    static <TYPE> TYPE callConstructor(Constructor<TYPE> constructor, IProvideObject objectProvider)
+            throws ReflectiveOperationException {
         // TODO - Change to use method handle.
         val paramsArray = constructor.getParameters();
         val paramValues = getParameters(paramsArray, objectProvider);
         val instance    = constructor.newInstance(paramValues);
-        return (T)instance;
+        return (TYPE)instance;
     }
     
 }

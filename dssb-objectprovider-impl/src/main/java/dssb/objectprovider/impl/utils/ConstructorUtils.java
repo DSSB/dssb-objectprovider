@@ -17,6 +17,7 @@ package dssb.objectprovider.impl.utils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.util.function.Supplier;
 
 import dssb.objectprovider.impl.exception.ObjectCreationException;
 import lombok.experimental.ExtensionMethod;
@@ -29,10 +30,10 @@ import nawaman.nullablej.NullableJ;
  */
 @ExtensionMethod({
     NullableJ.class,
-    AnnotationUtils.class
+    AnnotationUtils.class,
+    ConstructorUtils.class
 })
 public class ConstructorUtils {
-
     
     /**
      * Checks if the constructor is public (null-safe).
@@ -45,6 +46,24 @@ public class ConstructorUtils {
             return false;
         
         return Modifier.isPublic(constructor.getModifiers());
+    }
+    
+    /**
+     * Returns a supplier of a sensible default constructor for the given class.
+     * 
+     * If there is only one constructor, return that one.
+     * If there is more than one constructor, return the one without arguments.
+     * Otherwise, return null.
+     * 
+     * @param <T>   the data type.
+     * @param clzz  the data class.
+     * @return  the sensible default constructor.
+     */
+    public static <T> Supplier<Constructor<T>> sensibleDefaultConstructorOf(Class<T> clzz) {
+        return ()->
+                clzz.hasOnlyOneConsructor()
+                ? clzz.getOnlyConstructor()
+                : clzz.getNoArgConstructor();
     }
     
     /**
