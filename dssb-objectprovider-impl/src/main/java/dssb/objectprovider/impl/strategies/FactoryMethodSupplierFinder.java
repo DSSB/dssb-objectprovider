@@ -28,6 +28,7 @@ import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
 import nawaman.nullablej.NullableJ;
+import nawaman.nullablej.nullable.Nullable;
 
 /**
  * This class returns object resulting from a factory method.
@@ -74,6 +75,14 @@ public class FactoryMethodSupplierFinder extends MethodSupplierFinder implements
                 return (Supplier)(()->optionalFactoryMethodCall(theGivenClass, method, objectProvider));
         }
         
+        if (Nullable.class.isAssignableFrom(type)) {
+            val parameterizedType = (ParameterizedType)method.getGenericReturnType();
+            val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
+            
+            if (theGivenClass.isAssignableFrom(actualType))
+                return (Supplier)(()->nullableFactoryMethodCall(theGivenClass, method, objectProvider));
+        }
+        
         if (java.util.function.Supplier.class.isAssignableFrom(type)) {
             val parameterizedType = (ParameterizedType)method.getGenericReturnType();
             val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
@@ -114,6 +123,14 @@ public class FactoryMethodSupplierFinder extends MethodSupplierFinder implements
         val params = getMethodParameters(method, objectProvider);
         val value = method.invoke(theGivenClass, params);
         return ((Optional)value).orElse(null);
+    }
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private <T> Object nullableFactoryMethodCall(Class<T> theGivenClass, Method method, IProvideObject objectProvider)
+            throws IllegalAccessException, InvocationTargetException {
+        val params = getMethodParameters(method, objectProvider);
+        val value = method.invoke(theGivenClass, params);
+        return ((Nullable)value).orElse(null);
     }
     
     private <T> Object basicFactoryMethodCall(Class<T> theGivenClass, Method method, IProvideObject objectProvider)

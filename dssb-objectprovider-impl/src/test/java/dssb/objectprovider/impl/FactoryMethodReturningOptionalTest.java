@@ -17,6 +17,8 @@ package dssb.objectprovider.impl;
 
 import static org.junit.Assert.assertEquals;
 
+import nawaman.nullablej.nullable.Nullable;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Optional;
@@ -50,7 +52,7 @@ public class FactoryMethodReturningOptionalTest {
     }
     
     @Test
-    public void testThat_classWithFactoryMethodDefaultAnnotationHasTheResultAsTheValue_optonal() {
+    public void testThat_classWithFactoryMethodDefaultAnnotationHasTheResultAsTheValue_optional() {
         int prevCounter = OptionalFactoryMethodFactoryMethod.counter;
         
         assertEquals("factory", provider.get(OptionalFactoryMethodFactoryMethod.class).string);
@@ -58,6 +60,33 @@ public class FactoryMethodReturningOptionalTest {
         
         assertEquals("factory", provider.get(OptionalFactoryMethodFactoryMethod.class).string);
         assertEquals(prevCounter + 2, OptionalFactoryMethodFactoryMethod.counter);
+    }
+    
+    public static class NullableFactoryMethodFactoryMethod {
+        
+        private static int counter = 0;
+        private String string;
+        
+        private NullableFactoryMethodFactoryMethod(String string) {
+            this.string = string;
+        }
+        
+        @Default
+        public static Nullable<NullableFactoryMethodFactoryMethod> newInstance() {
+            counter++;
+            return Nullable.of(new NullableFactoryMethodFactoryMethod("factory"));
+        }
+    }
+    
+    @Test
+    public void testThat_classWithFactoryMethodDefaultAnnotationHasTheResultAsTheValue_nullalbe() {
+        int prevCounter = NullableFactoryMethodFactoryMethod.counter;
+        
+        assertEquals("factory", provider.get(NullableFactoryMethodFactoryMethod.class).string);
+        assertEquals(prevCounter + 1, NullableFactoryMethodFactoryMethod.counter);
+        
+        assertEquals("factory", provider.get(NullableFactoryMethodFactoryMethod.class).string);
+        assertEquals(prevCounter + 2, NullableFactoryMethodFactoryMethod.counter);
     }
     
 }

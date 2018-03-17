@@ -18,6 +18,8 @@ package dssb.objectprovider.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import nawaman.nullablej.nullable.Nullable;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Optional;
@@ -59,6 +61,35 @@ public class SingletonFieldOfOptionalTest {
     public void testThat_optionalSingletonClassWithDefaultAnnotationHasTheInstanceAsTheValue_empty() {
         EmptyOptionalSingleton value = provider.get(EmptyOptionalSingleton.class);
         assertEquals(EmptyOptionalSingleton.instance.orElse(null), value);
+        assertNull(value);
+    }
+    
+    
+    public static class NullableSingleton {
+        @Default
+        public static final Nullable<NullableSingleton> instance = Nullable.of(new NullableSingleton());
+        
+        private NullableSingleton() {}
+    }
+    
+    @Test
+    public void testThat_nullableSingletonClassWithDefaultAnnotationHasTheInstanceAsTheValue() {
+        NullableSingleton value = provider.get(NullableSingleton.class);
+        assertEquals(NullableSingleton.instance.get(), value);
+    }
+    
+    
+    public static class EmptyNullableSingleton {
+        @Default
+        public static final Nullable<EmptyNullableSingleton> instance = Nullable.empty();
+        
+        private EmptyNullableSingleton() {}
+    }
+    
+    @Test
+    public void testThat_nullableSingletonClassWithDefaultAnnotationHasTheInstanceAsTheValue_empty() {
+        EmptyNullableSingleton value = provider.get(EmptyNullableSingleton.class);
+        assertEquals(EmptyNullableSingleton.instance.orElse(null), value);
         assertNull(value);
     }
     

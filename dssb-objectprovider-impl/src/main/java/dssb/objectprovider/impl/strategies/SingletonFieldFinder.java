@@ -27,13 +27,14 @@ import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
 import nawaman.nullablej.NullableJ;
+import nawaman.nullablej.nullable.Nullable;
 
 /**
  * This class provides value from the singleton field
  * 
  * <ul>
  *  <li>the static final field</li>
- *  <li>the same type, the Optional of the type or the Supplier of the type</li>
+ *  <li>the same type, the Optional of the type, the Nullable of the type or the Supplier of the type</li>
  *  <li>annotated with @Default</li>
  * </ul>
  * 
@@ -71,6 +72,13 @@ public class SingletonFieldFinder implements IFindSupplier {
                         
                         if (theGivenClass.isAssignableFrom(actualType))
                             return (Supplier)(()->((Optional)field.get(theGivenClass)).orElse(null));
+                    }
+                    if (Nullable.class.isAssignableFrom(type)) {
+                        val parameterizedType = (ParameterizedType)field.getGenericType();
+                        val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
+                        
+                        if (theGivenClass.isAssignableFrom(actualType))
+                            return (Supplier)(()->((Nullable)field.get(theGivenClass)).orElse(null));
                     }
                     
                     if (java.util.function.Supplier.class.isAssignableFrom(type)) {

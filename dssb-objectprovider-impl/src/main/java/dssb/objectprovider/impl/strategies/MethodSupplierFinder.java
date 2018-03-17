@@ -25,6 +25,7 @@ import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
 import nawaman.nullablej.NullableJ;
+import nawaman.nullablej.nullable.Nullable;
 
 
 // TODO - Change this to composite to inherit
@@ -75,6 +76,8 @@ public abstract class MethodSupplierFinder implements IFindSupplier {
             
             if (paramType == Optional.class)
                 return getOptionalValueOrNullWhenFailAndNullable(isNullable, actualType, objectProvider);
+            if (paramType == Nullable.class)
+                return getNullableValueOrNullWhenFailAndNullable(isNullable, actualType, objectProvider);
         }
         
         if (isNullable)
@@ -91,6 +94,16 @@ public abstract class MethodSupplierFinder implements IFindSupplier {
             return Optional.ofNullable(paramValue);
         } catch (Exception e) {
             return isNullable ? null : Optional.empty();
+        }
+    }
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    protected Object getNullableValueOrNullWhenFailAndNullable(boolean isNullable, Class actualType, IProvideObject objectProvider) {
+        try {
+            val paramValue = objectProvider.get(actualType);
+            return Nullable.of(paramValue);
+        } catch (Exception e) {
+            return isNullable ? null : Nullable.empty();
         }
     }
     
