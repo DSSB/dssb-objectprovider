@@ -16,15 +16,17 @@
 package dssb.objectprovider.impl.strategies;
 
 import static dssb.objectprovider.impl.strategies.common.NullSupplier;
-import static java.util.Arrays.stream;
 
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import dssb.objectprovider.api.IProvideObject;
 import dssb.objectprovider.impl.utils.AnnotationUtils;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
+import nawaman.failable.Failables;
 import nawaman.nullablej.NullableJ;
 
 /**
@@ -34,50 +36,57 @@ import nawaman.nullablej.NullableJ;
  */
 @ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
 public class ImplementedBySupplierFinder implements IFindSupplier {
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    
+    private static final Function<String, String> extractValue
+            = toString->toString.replaceAll("^(.*\\(value=)(.*)(\\))$", "$2");
+    
+    private static final Function<Object, String> toString = Object::toString;
+    private static final Predicate<Object>        notNull  = Objects::nonNull;
+    
+    @SuppressWarnings("unchecked")
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>    theGivenClass,
             IProvideObject objectProvider) {
-        if (theGivenClass.getAnnotations().has("ImplementedBy")) {
-            val defaultImplementationClass = findDefaultImplementation(theGivenClass);
-            if (defaultImplementationClass._isNotNull()) {
-                return new Supplier() {
-                    @Override
-                    public Object get() throws Throwable {
-                        return objectProvider.get(defaultImplementationClass);
-                    }
-                };
-            }
-            return NullSupplier;
-        }
-        
-        return null;
-    }
-    
-    @SuppressWarnings("rawtypes")
-    private static <T> Class findDefaultImplementation(Class<T> theGivenClass) {
-        return stream(theGivenClass.getAnnotations())
-            .map(Object::toString)
-            .map(toString->toString.replaceAll("^(.*\\(value=)(.*)(\\))$", "$2"))
-            .map(ImplementedBySupplierFinder::findClass)
-            .filter(Objects::nonNull)
-            .filter(theGivenClass::isAssignableFrom)
-            .findAny()
-            .orElse(null);
-    }
-    
-    /**
-     * Find the {@code java.inject.Inject} class by name.
-     * @return the class if found or {@code null} if not.
-     */
-    static Class<?> findClass(String name) {
-        try {
-            return Class.forName(name);
-        } catch (ClassNotFoundException e) {
+        if (!theGivenClass.getAnnotations().has("ImplementedBy"))
             return null;
-        }
+        
+        val defaultImplementationClass = findDefaultImplementation(theGivenClass);
+        if (defaultImplementationClass._isNull())
+            return NullSupplier;
+        
+        return Failables.of(()->{ 
+            return (TYPE)objectProvider.get(defaultImplementationClass);
+        });
+    }
+    
+    @SuppressWarnings("unchecked")
+    private static <T> Class<T> findDefaultImplementation(Class<T> theGivenClass) {
+        val implementedClass
+                = theGivenClass.getAnnotations()._stream$()
+                .map(toString)
+                .map(extractValue)
+                .map(findClass())
+                .filter(notNull)
+                .filter(isAssignableTo(theGivenClass))
+                .findAny()
+                .orElse(null);
+        return (Class<T>)implementedClass;
+    }
+    
+    @SuppressWarnings("unchecked")
+    static <T> Function<String, Class<T>> findClass() {
+        return name -> {
+            try {
+                return (Class<T>)Class.forName(name);
+            } catch (ClassNotFoundException e) {
+                return null;
+            }
+        };
+    }
+    
+    static <T> Predicate<Class<T>> isAssignableTo(Class<?> theGivenClass) {
+        return theGivenClass::isAssignableFrom;
     }
     
 }

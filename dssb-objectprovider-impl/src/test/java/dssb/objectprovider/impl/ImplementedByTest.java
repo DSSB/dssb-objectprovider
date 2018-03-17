@@ -67,7 +67,7 @@ public class ImplementedByTest {
         assertEquals(TheClass2.TEXT, provider.get(TheInterface2User.class).getText());
     }
 
-    @ImplementedBy("directget.get.TheClassThatDoesNotExist")
+    @ImplementedBy(value="directget.get.TheClassThatDoesNotExist")
     public static interface TheInterface3 {
         
         public String getText();
