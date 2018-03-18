@@ -16,6 +16,7 @@
 package dssb.objectprovider.impl.strategies;
 
 import static dssb.objectprovider.impl.utils.ConstructorUtils.sensibleDefaultConstructorOf;
+import static dssb.objectprovider.impl.utils.MethodSupplierFinderUtils.prepareParameters;
 
 import java.lang.reflect.Constructor;
 
@@ -39,7 +40,7 @@ import nawaman.nullablej.NullableJ;
     ConstructorUtils.class,
     AnnotationUtils.class
 })
-public class ConstructorSupplierFinder extends MethodSupplierFinder implements IFindSupplier {
+public class ConstructorSupplierFinder implements IFindSupplier {
     
     /** The name of the Inject annotation */
     public static final String INJECT = Inject.class.getSimpleName();
@@ -63,8 +64,7 @@ public class ConstructorSupplierFinder extends MethodSupplierFinder implements I
     static <TYPE> TYPE callConstructor(Constructor<TYPE> constructor, IProvideObject objectProvider)
             throws ReflectiveOperationException {
         // TODO - Change to use method handle.
-        val paramsArray = constructor.getParameters();
-        val paramValues = getParameters(paramsArray, objectProvider);
+        val paramValues = prepareParameters(constructor, objectProvider);
         val instance    = constructor.newInstance(paramValues);
         return (TYPE)instance;
     }

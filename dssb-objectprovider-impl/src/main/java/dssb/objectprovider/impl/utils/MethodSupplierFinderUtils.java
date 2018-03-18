@@ -13,8 +13,9 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package dssb.objectprovider.impl.strategies;
+package dssb.objectprovider.impl.utils;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
@@ -22,15 +23,12 @@ import java.lang.reflect.Type;
 import java.util.Optional;
 
 import dssb.objectprovider.api.IProvideObject;
-import dssb.objectprovider.impl.utils.AnnotationUtils;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
 import nawaman.nullablej.NullableJ;
 import nawaman.nullablej.nullable.Nullable;
 
-
-// TODO - Change this to composite to inherit
 /**
  * Abstract class for supplier finders that get value from constructor or method.
  * 
@@ -40,15 +38,35 @@ import nawaman.nullablej.nullable.Nullable;
     NullableJ.class,
     AnnotationUtils.class
 })
-public abstract class MethodSupplierFinder implements IFindSupplier {
-
-    protected static Object[] getMethodParameters(Method method, IProvideObject objectProvider) {
+public class MethodSupplierFinderUtils {
+    
+    /**
+     * Returns the parameters for the given method.
+     * 
+     * @param method          the method.
+     * @param objectProvider  the object provider to use.
+     * @return  the array of parameters.
+     */
+    public static Object[] prepareParameters(Method method, IProvideObject objectProvider) {
         val paramsArray = method.getParameters();
         val paramValues = getParameters(paramsArray , objectProvider);
         return paramValues;
     }
     
-    protected static Object[] getParameters(Parameter[] paramsArray, IProvideObject objectProvider) {
+    /**
+     * Returns the parameters for the given constructor.
+     * 
+     * @param constructor     the constructor.
+     * @param objectProvider  the object provider to use.
+     * @return  the array of parameters.
+     */
+    public static Object[] prepareParameters(Constructor<?> constructor, IProvideObject objectProvider) {
+        val paramsArray = constructor.getParameters();
+        val paramValues = getParameters(paramsArray , objectProvider);
+        return paramValues;
+    }
+    
+    private static Object[] getParameters(Parameter[] paramsArray, IProvideObject objectProvider) {
         val params = new Object[paramsArray.length];
         for (int i = 0; i < paramsArray.length; i++) {
             val param             = paramsArray[i];
@@ -63,7 +81,7 @@ public abstract class MethodSupplierFinder implements IFindSupplier {
     }
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected static Object determineParameterValue(Class paramType, Type type, boolean canBeNull, IProvideObject objectProvider) {
+    private static Object determineParameterValue(Class paramType, Type type, boolean canBeNull, IProvideObject objectProvider) {
         if (type instanceof ParameterizedType) {
             val parameterizedType = (ParameterizedType)type;
             val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
@@ -108,7 +126,7 @@ public abstract class MethodSupplierFinder implements IFindSupplier {
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected static Object getValueOrNullWhenFail(Class paramType, IProvideObject objectProvider) {
+    private static Object getValueOrNullWhenFail(Class paramType, IProvideObject objectProvider) {
         try {
             return objectProvider.get(paramType);
         } catch (Exception e) {

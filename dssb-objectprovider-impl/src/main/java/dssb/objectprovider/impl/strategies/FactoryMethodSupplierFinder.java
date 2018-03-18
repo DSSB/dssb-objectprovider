@@ -15,6 +15,7 @@
 //  ========================================================================
 package dssb.objectprovider.impl.strategies;
 
+import static dssb.objectprovider.impl.utils.MethodSupplierFinderUtils.prepareParameters;
 import static dssb.objectprovider.impl.utils.MethodUtils.annotatedWith;
 import static dssb.objectprovider.impl.utils.MethodUtils.ifPublicMethod;
 import static dssb.objectprovider.impl.utils.MethodUtils.ifStaticMethod;
@@ -39,8 +40,11 @@ import nawaman.nullablej.nullable.Nullable;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
-public class FactoryMethodSupplierFinder extends MethodSupplierFinder implements IFindSupplier {
+@ExtensionMethod({
+    NullableJ.class,
+    AnnotationUtils.class
+})
+public class FactoryMethodSupplierFinder implements IFindSupplier {
     
     private static final Predicate<Method> annotatedWithDefault = annotatedWith("Default");
     
@@ -122,7 +126,7 @@ public class FactoryMethodSupplierFinder extends MethodSupplierFinder implements
         @SuppressWarnings({ "rawtypes", "unchecked" })
         private Object getNullableOrOptionalValue(Method method, final boolean isNullable)
                 throws IllegalAccessException, InvocationTargetException {
-            val params   = getMethodParameters(method, objectProvider);
+            val params   = prepareParameters(method, objectProvider);
             val nullable = method.invoke(theGivenClass, params);
             val value = isNullable
                     ? ((Nullable)nullable).orElse(null)
@@ -144,7 +148,7 @@ public class FactoryMethodSupplierFinder extends MethodSupplierFinder implements
                 Method method,
                 Method getMethod) 
                         throws IllegalAccessException, InvocationTargetException {
-            val params = getMethodParameters(method, objectProvider);
+            val params = prepareParameters(method, objectProvider);
             val result = method.invoke(theGivenClass, params);
             val value  = getMethod.invoke(result);
             return value;
@@ -152,7 +156,7 @@ public class FactoryMethodSupplierFinder extends MethodSupplierFinder implements
         
         private Object basicFactoryMethodCall(Method method)
                 throws IllegalAccessException, InvocationTargetException {
-            val params = getMethodParameters(method, objectProvider);
+            val params = prepareParameters(method, objectProvider);
             val value  = method.invoke(theGivenClass, params);
             return value;
         }
