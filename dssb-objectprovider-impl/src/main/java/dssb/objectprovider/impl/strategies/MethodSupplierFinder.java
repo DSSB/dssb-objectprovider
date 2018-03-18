@@ -36,7 +36,10 @@ import nawaman.nullablej.nullable.Nullable;
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
+@ExtensionMethod({
+    NullableJ.class,
+    AnnotationUtils.class
+})
 public abstract class MethodSupplierFinder implements IFindSupplier {
 
     protected static Object[] getMethodParameters(Method method, IProvideObject objectProvider) {
@@ -60,57 +63,47 @@ public abstract class MethodSupplierFinder implements IFindSupplier {
     }
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected static Object determineParameterValue(Class paramType, Type type, boolean isNullable, IProvideObject objectProvider) {
+    protected static Object determineParameterValue(Class paramType, Type type, boolean canBeNull, IProvideObject objectProvider) {
         if (type instanceof ParameterizedType) {
             val parameterizedType = (ParameterizedType)type;
             val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
             
-            if (paramType == Supplier.class)
-                return new Supplier() {
-                    @Override
-                    public Object get() throws Throwable {
-                        return objectProvider.get(actualType);
-                    }
-                };
+            if (Supplier.class.isAssignableFrom(paramType))
+                return  (Supplier)(()-> {
+                    val value = objectProvider.get(actualType);
+                    return value;
+                });
             
-            if (paramType == java.util.function.Supplier.class)
-                return new java.util.function.Supplier() {
-                    @Override
-                    public Object get() {
-                        return objectProvider.get(actualType);
-                    }
-                };
+            if (java.util.function.Supplier.class.isAssignableFrom(paramType))
+                return (java.util.function.Supplier)(()->{
+                    val value = objectProvider.get(actualType);
+                    return value;
+                });
             
-            if (paramType == Optional.class)
-                return getOptionalValueOrNullWhenFailAndNullable(isNullable, actualType, objectProvider);
-            if (paramType == Nullable.class)
-                return getNullableValueOrNullWhenFailAndNullable(isNullable, actualType, objectProvider);
+            val isOptional = Optional.class.isAssignableFrom(paramType);
+            val isNullable = !isOptional && Nullable.class.isAssignableFrom(paramType);
+            if (isOptional || isNullable) {
+                return getNullableOrOptionalValue(canBeNull, objectProvider, actualType, isOptional);
+            }
         }
         
-        if (isNullable)
+        if (canBeNull)
             return getValueOrNullWhenFail(paramType, objectProvider);
         
-        val paramValue = objectProvider.get(paramType);
-        return paramValue;
+        val value = objectProvider.get(paramType);
+        return value;
     }
     
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected static Object getOptionalValueOrNullWhenFailAndNullable(boolean isNullable, Class actualType, IProvideObject objectProvider) {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private static Object getNullableOrOptionalValue(boolean canBeNull, IProvideObject objectProvider,
+            final java.lang.Class actualType, final boolean isOptional) {
+        java.util.function.Function noException   = isOptional ? Optional::ofNullable : Nullable::of;
+        java.util.function.Supplier withException = isOptional ? Optional::empty      : Nullable::empty;
         try {
             val paramValue = objectProvider.get(actualType);
-            return Optional.ofNullable(paramValue);
+            return noException.apply(paramValue);
         } catch (Exception e) {
-            return isNullable ? null : Optional.empty();
-        }
-    }
-    
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    protected static Object getNullableValueOrNullWhenFailAndNullable(boolean isNullable, Class actualType, IProvideObject objectProvider) {
-        try {
-            val paramValue = objectProvider.get(actualType);
-            return Nullable.of(paramValue);
-        } catch (Exception e) {
-            return isNullable ? null : Nullable.empty();
+            return canBeNull ? null : withException.get();
         }
     }
     
