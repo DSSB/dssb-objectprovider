@@ -21,12 +21,18 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * A ready to use annotation to mask that a constructor is the be used to create the object.
+ * A ready to use annotation to specify a classname for the default implementation.
+ * 
+ * If the class is not found in the classpath or it was found to be uncompatible,
+ *   this annotation will be ignore.
  * 
  * @author NawaMan -- nawaman@dssb.io
  */
-@Target(value=ElementType.CONSTRUCTOR)
+@Target(value=ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Inject {
+public @interface DefaultImplementation {
+    
+    /** The name of the implementation class. */
+    public String value();
     
 }

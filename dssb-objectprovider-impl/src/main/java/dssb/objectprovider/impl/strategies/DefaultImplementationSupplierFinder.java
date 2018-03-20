@@ -35,7 +35,7 @@ import nawaman.nullablej.NullableJ;
  * @author NawaMan -- nawaman@dssb.io
  */
 @ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
-public class ImplementedBySupplierFinder implements IFindSupplier {
+public class DefaultImplementationSupplierFinder implements IFindSupplier {
     
     private static final Function<String, String> extractValue
             = toString->toString.replaceAll("^(.*\\(value=)(.*)(\\))$", "$2");
@@ -48,7 +48,7 @@ public class ImplementedBySupplierFinder implements IFindSupplier {
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>    theGivenClass,
             IProvideObject objectProvider) {
-        if (!theGivenClass.getAnnotations().has("ImplementedBy"))
+        if (!theGivenClass.getAnnotations().has("DefaultImplementation"))
             return null;
         
         val defaultImplementationClass = findDefaultImplementation(theGivenClass);

@@ -37,7 +37,7 @@ import dssb.objectprovider.impl.strategies.DefaultInterfaceSupplierFinder;
 import dssb.objectprovider.impl.strategies.EnumValueSupplierFinder;
 import dssb.objectprovider.impl.strategies.FactoryMethodSupplierFinder;
 import dssb.objectprovider.impl.strategies.IFindSupplier;
-import dssb.objectprovider.impl.strategies.ImplementedBySupplierFinder;
+import dssb.objectprovider.impl.strategies.DefaultImplementationSupplierFinder;
 import dssb.objectprovider.impl.strategies.NullSupplierFinder;
 import dssb.objectprovider.impl.strategies.SingletonFieldFinder;
 import lombok.AllArgsConstructor;
@@ -67,7 +67,7 @@ public class ObjectProvider implements IProvideObject {
     
     
     private static final List<IFindSupplier> classLevelfinders = Arrays.asList(
-            new ImplementedBySupplierFinder(),
+            new DefaultImplementationSupplierFinder(),
             new NullSupplierFinder(),
             new EnumValueSupplierFinder(),
             new DefaultInterfaceSupplierFinder()

@@ -28,19 +28,19 @@ import nawaman.nullablej.NullableJ;
 
 @SuppressWarnings("javadoc")
 @ExtensionMethod({ NullableJ.class })
-public class ImplementedByTest {
+public class DefaultImplementationTest {
     
     private ObjectProvider provider = new ObjectProvider();
     
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface ImplementedBy {
+    public @interface DefaultImplementation {
         
         public String value();
         
     }
     
     
-    @ImplementedBy("dssb.objectprovider.impl.TheClass2")
+    @DefaultImplementation("dssb.objectprovider.impl.TheClass2")
     public static interface TheInterface2 {
         
         public String getText();
@@ -67,7 +67,7 @@ public class ImplementedByTest {
         assertEquals(TheClass2.TEXT, provider.get(TheInterface2User.class).getText());
     }
 
-    @ImplementedBy(value="directget.get.TheClassThatDoesNotExist")
+    @DefaultImplementation(value="directget.get.TheClassThatDoesNotExist")
     public static interface TheInterface3 {
         
         public String getText();

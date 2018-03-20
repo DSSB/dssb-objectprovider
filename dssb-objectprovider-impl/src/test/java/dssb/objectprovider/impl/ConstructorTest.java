@@ -89,7 +89,7 @@ public class ConstructorTest {
     //== Injected Constructor ==
     
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface Inject {
+    public @interface Default {
         
     }
     
@@ -98,7 +98,7 @@ public class ConstructorTest {
         public AnotherPerson() {
             this(null);
         }
-        @Inject
+        @Default
         public AnotherPerson(Car car) {
             this.car = car;
         }
