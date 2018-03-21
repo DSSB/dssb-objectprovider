@@ -24,7 +24,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import dssb.objectprovider.impl.annotations.Nullable;
+import dssb.objectprovider.annotations.Nullable;
 import dssb.objectprovider.impl.exception.CyclicDependencyDetectedException;
 import dssb.objectprovider.impl.exception.ObjectCreationException;
 import lombok.val;

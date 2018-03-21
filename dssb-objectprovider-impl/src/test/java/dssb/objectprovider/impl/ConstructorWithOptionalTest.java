@@ -22,7 +22,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import dssb.objectprovider.impl.annotations.Nullable;
+import dssb.objectprovider.annotations.Nullable;
 import lombok.experimental.ExtensionMethod;
 import nawaman.nullablej.NullableJ;
 
@@ -92,7 +92,7 @@ public class ConstructorWithOptionalTest {
     @ExtensionMethod({ NullableJ.class })
     public static class ExecutiveOptional {
         private Salary salary;
-        public ExecutiveOptional(@dssb.objectprovider.impl.annotations.Optional Salary salary) {
+        public ExecutiveOptional(@dssb.objectprovider.annotations.Optional Salary salary) {
             this.salary = salary;
         }
         public Salary salary() {
@@ -120,7 +120,7 @@ public class ConstructorWithOptionalTest {
     @ExtensionMethod({ NullableJ.class })
     public static class OwnerOptional {
         private Optional<Salary> salary;
-        public OwnerOptional(@dssb.objectprovider.impl.annotations.Optional Optional<Salary> salary) {
+        public OwnerOptional(@dssb.objectprovider.annotations.Optional Optional<Salary> salary) {
             this.salary = salary;
         }
         public Optional<Salary> salary() {

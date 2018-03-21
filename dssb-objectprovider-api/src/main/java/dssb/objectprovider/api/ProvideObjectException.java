@@ -50,6 +50,17 @@ public class ProvideObjectException extends RuntimeException {
     }
     
     /**
+     * Constructor 
+     * 
+     * @param msg    the error message.
+     * @param clazz  the class that this fail creation is attempted too.
+     **/
+    protected ProvideObjectException(String msg, Class<?> clazz) {
+        super(msg);
+        this.clazz = clazz;
+    }
+    
+    /**
      * Returns the target class.
      * 
      * @return the target class with the problem.

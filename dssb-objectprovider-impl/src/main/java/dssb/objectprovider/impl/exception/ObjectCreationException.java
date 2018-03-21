@@ -38,8 +38,8 @@ public class ObjectCreationException extends ProvideObjectException {
     /**
      * Constructor 
      * 
-     * @param clazz 
-     * @param cause
+     * @param clazz  the class that cause this exception.
+     * @param cause  the cause exception of this exception.
      **/
     public ObjectCreationException(Class<?> clazz, Throwable cause) {
         super(clazz, cause);

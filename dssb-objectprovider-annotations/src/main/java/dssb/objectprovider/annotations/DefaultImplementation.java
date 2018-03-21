@@ -13,7 +13,7 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package dssb.objectprovider.impl.annotations;
+package dssb.objectprovider.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -32,7 +32,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DefaultImplementation {
     
-    /** The name of the implementation class. */
+    /**
+     * The name of the implementation class.
+     * 
+     * @return  the specified class name to be used as an implementation.
+     **/
     public String value();
     
 }

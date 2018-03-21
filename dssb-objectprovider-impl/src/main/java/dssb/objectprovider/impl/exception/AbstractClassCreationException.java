@@ -32,7 +32,18 @@ public class AbstractClassCreationException extends ProvideObjectException {
      * @param clazz  the class that this fail creation is attempted too.
      **/
     public AbstractClassCreationException(Class<?> clazz) {
-        super(clazz);
+        this("Abstract class can't be created: " + clazz, clazz);
+    }
+    
+
+    /**
+     * Constructor 
+     * 
+     * @param msg    the error message.
+     * @param clazz  the class that this fail creation is attempted too.
+     **/
+    protected AbstractClassCreationException(String msg, Class<?> clazz) {
+        super(msg, clazz);
     }
     
 }

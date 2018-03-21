@@ -18,8 +18,8 @@ package dssb.objectprovider.impl.strategies;
 import nawaman.failable.Failable.Supplier;
 
 class common {
-
+    
     @SuppressWarnings("rawtypes")
-    public static final Supplier NullSupplier = ()->null;
+    public static final Supplier NullSupplier = () -> null;
     
 }

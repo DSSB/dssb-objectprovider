@@ -21,7 +21,6 @@ import static dssb.objectprovider.impl.utils.MethodSupplierFinderUtils.preparePa
 import java.lang.reflect.Constructor;
 
 import dssb.objectprovider.api.IProvideObject;
-import dssb.objectprovider.impl.annotations.Default;
 import dssb.objectprovider.impl.utils.AnnotationUtils;
 import dssb.objectprovider.impl.utils.ConstructorUtils;
 import lombok.val;
@@ -43,7 +42,7 @@ import nawaman.nullablej.NullableJ;
 public class ConstructorSupplierFinder implements IFindSupplier {
     
     /** The name of the Inject annotation */
-    public static final String DEFAULT = Default.class.getSimpleName();
+    public static final String DEFAULT = "Default";
     
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE>

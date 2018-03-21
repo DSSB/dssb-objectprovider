@@ -185,7 +185,7 @@ public class ObjectProvider implements IProvideObject {
     /**
      * Create an instance of the given class.
      * 
-     * @param theGivenClass
+     * @param theGivenClass  the data class.
      * @return the created value.
      * @throws ProvideObjectException when there is a problem providing the object.
      */

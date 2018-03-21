@@ -1,5 +1,6 @@
 
 include ":dssb-objectprovider-api"
 include ":dssb-objectprovider-impl"
+include ":dssb-objectprovider-annotations"
 
 rootProject.name = theGroup

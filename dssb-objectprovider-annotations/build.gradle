@@ -8,7 +8,6 @@ repositories {
 
 dependencies {
     compile project(':dssb-objectprovider-api')
-    compile project(':dssb-objectprovider-annotations')
     
     compileOnly 'org.projectlombok:lombok:1.16.16'
 
@@ -20,3 +19,16 @@ dependencies {
     testCompile 'junit:junit:4.12'
     
 }
+
+// == Annotation processor
+//
+//task compileAnnotationProcessor (type: JavaCompile) {
+//    options.compilerArgs << "-proc:none"
+//    options.incremental = true
+//    
+//    source         = file("src/main/annotationprocessor")
+//    destinationDir = file('build/classes/java/main')
+//    classpath      = sourceSets.main.compileClasspath
+//}
+//
+//compileJava.dependsOn compileAnnotationProcessor

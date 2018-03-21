@@ -17,8 +17,8 @@ package dssb.objectprovider.impl.strategies;
 
 import static dssb.objectprovider.impl.strategies.common.NullSupplier;
 
+import dssb.objectprovider.annotations.DefaultToNull;
 import dssb.objectprovider.api.IProvideObject;
-import dssb.objectprovider.impl.annotations.DefaultToNull;
 import dssb.objectprovider.impl.utils.AnnotationUtils;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;

@@ -38,10 +38,10 @@ public class CyclicDependencyDetectedException extends ProvideObjectException {
     }
     
     /**
-     * Constructor 
+     * Construct an exception
      * 
-     * @param clazz 
-     * @param cause
+     * @param clazz  the class that causes this cyclic.
+     * @param cause  the cause exception.
      **/
     public CyclicDependencyDetectedException(Class<?> clazz, Throwable cause) {
         super(clazz, cause);
